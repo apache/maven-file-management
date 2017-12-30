@@ -43,10 +43,6 @@
     </contributor>
   </contributors>
 
-  <prerequisites>
-    <maven>${mavenVersion}</maven>
-  </prerequisites>
-
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/trunk/file-management</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/trunk/file-management</developerConnection>
