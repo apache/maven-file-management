@@ -24,9 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 
- */
+
 final class MessageLevels
 {
 
@@ -83,10 +81,6 @@ final class MessageLevels
         return states;
     }
 
-    /**
-     * @param messageLevel the message level
-     * @return the label
-     */
     static String getLevelLabel( int messageLevel )
     {
         if ( messageLevel > -1 && LEVEL_NAMES.size() > messageLevel )
