@@ -33,11 +33,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.shared.io.logging.DefaultMessageHolder;
-import org.apache.maven.shared.io.logging.MessageHolder;
-import org.apache.maven.shared.io.logging.MessageLevels;
-import org.apache.maven.shared.io.logging.MojoLogSink;
-import org.apache.maven.shared.io.logging.PlexusLoggerSink;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.mappers.FileNameMapper;
 import org.apache.maven.shared.model.fileset.mappers.MapperException;
@@ -68,20 +63,20 @@ public class FileSetManager
     /**
      * Create a new manager instance with the supplied log instance and flag for whether to output verbose messages.
      *
-     * @param log The mojo log instance
-     * @param verbose Whether to output verbose messages
+     * @param log the mojo log instance
+     * @param verbose whether to output verbose messages
      */
     public FileSetManager( Log log, boolean verbose )
     {
         if ( verbose )
         {
             this.messages =
-                new DefaultMessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
+                new MessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
         }
         else
         {
             this.messages =
-                new DefaultMessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
+                new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
         }
 
         this.verbose = verbose;
@@ -95,7 +90,7 @@ public class FileSetManager
     public FileSetManager( Log log )
     {
         this.messages =
-            new DefaultMessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
+            new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
         this.verbose = false;
     }
 
@@ -109,12 +104,12 @@ public class FileSetManager
     {
         if ( verbose )
         {
-            this.messages = new DefaultMessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO,
+            this.messages = new MessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO,
                                                       new PlexusLoggerSink( log ) );
         }
         else
         {
-            this.messages = new DefaultMessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO,
+            this.messages = new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO,
                                                       new PlexusLoggerSink( log ) );
         }
 
@@ -129,7 +124,7 @@ public class FileSetManager
     public FileSetManager( Logger log )
     {
         this.messages =
-            new DefaultMessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new PlexusLoggerSink( log ) );
+            new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new PlexusLoggerSink( log ) );
         this.verbose = false;
     }
 
