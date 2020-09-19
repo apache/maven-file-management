@@ -27,11 +27,11 @@ class MessageHolder
 
     private Message currentMessage;
 
-    private int defaultMessageLevel = MessageLevels.LEVEL_INFO;
+    private final int defaultMessageLevel;
 
-    private boolean[] messageLevelStates;
+    private final boolean[] messageLevelStates;
 
-    private MessageSink onDemandSink;
+    private final MessageSink onDemandSink;
 
     MessageHolder( int maxMessageLevel, int defaultMessageLevel, MessageSink onDemandSink )
     {
@@ -99,7 +99,7 @@ class MessageHolder
 
     private static final class Message
     {
-        private StringBuffer message = new StringBuffer();
+        private final StringBuffer message = new StringBuffer();
 
         private Throwable error;
 
@@ -139,7 +139,7 @@ class MessageHolder
             {
                 buffer.append( '[' ).append( MessageLevels.getLevelLabel( messageLevel ) ).append( "] " );
             }
-            if ( message != null && message.length() > 0 )
+            if ( message.length() > 0 )
             {
                 buffer.append( message );
 

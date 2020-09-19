@@ -39,7 +39,7 @@ final class MessageLevels
 
     static
     {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         names.add( "DEBUG" );
         names.add( "INFO" );
         names.add( "WARN" );
@@ -85,7 +85,7 @@ final class MessageLevels
     {
         if ( messageLevel > -1 && LEVEL_NAMES.size() > messageLevel )
         {
-            return (String) LEVEL_NAMES.get( messageLevel );
+            return LEVEL_NAMES.get( messageLevel );
         }
 
         throw new IllegalArgumentException( "Invalid message level: " + messageLevel );

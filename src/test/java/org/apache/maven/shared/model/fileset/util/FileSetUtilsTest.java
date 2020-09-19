@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.maven.shared.model.fileset.FileSet;
@@ -32,35 +31,33 @@ import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.Commandline;
 import org.apache.maven.shared.utils.io.FileUtils;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Test the FileSet
- *
- * @version $Id$
  */
 public class FileSetUtilsTest
-    extends TestCase
 {
-    private Set<File> testDirectories = new HashSet<File>();
+    private final Set<File> testDirectories = new HashSet<>();
 
-    private Set<File> linkFiles = new HashSet<File>();
+    private final Set<File> linkFiles = new HashSet<>();
 
     /** {@inheritDoc} */
+    @After
     public void tearDown()
         throws IOException
     {
-        for ( Iterator<File> it = linkFiles.iterator(); it.hasNext(); )
+        for ( File linkFile : linkFiles )
         {
-            File linkFile = it.next();
-
             linkFile.delete();
         }
 
-        for ( Iterator<File> it = testDirectories.iterator(); it.hasNext(); )
+        for ( File dir : testDirectories )
         {
-            File dir = it.next();
-
             FileUtils.deleteDirectory( dir );
         }
     }
@@ -68,6 +65,7 @@ public class FileSetUtilsTest
     /**
      * @throws IOException if any
      */
+    @Test
     public void testGetIncludedFiles()
         throws IOException
     {
@@ -89,6 +87,7 @@ public class FileSetUtilsTest
      * @throws InterruptedException if any
      * @throws org.apache.maven.shared.utils.cli.CommandLineException if any
      */
+    @Test
     public void testIncludesDontFollowSymlinks()
         throws IOException, InterruptedException, CommandLineException
     {
@@ -119,6 +118,7 @@ public class FileSetUtilsTest
      * @throws InterruptedException if any
      * @throws CommandLineException if any
      */
+    @Test
     public void testDeleteDontFollowSymlinks()
         throws IOException, InterruptedException, CommandLineException
     {
@@ -148,6 +148,7 @@ public class FileSetUtilsTest
     /**
      * @throws IOException if any
      */
+    @Test
     public void testDelete()
         throws IOException
     {
@@ -169,6 +170,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteDanglingSymlink()
         throws Exception
     {
@@ -197,6 +199,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteExcludeParentOfExcludedFile()
         throws Exception
     {
@@ -217,6 +220,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteExcludeParentOfExcludedDir()
         throws Exception
     {
@@ -237,6 +241,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteExcludeFollowSymlinks()
         throws Exception
     {
@@ -259,6 +264,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteExcludeDontFollowSymlinks()
         throws Exception
     {
@@ -281,6 +287,7 @@ public class FileSetUtilsTest
     /**
      * @throws Exception if any
      */
+    @Test
     public void testDeleteDontFollowSymlinksButDeleteThem()
         throws Exception
     {

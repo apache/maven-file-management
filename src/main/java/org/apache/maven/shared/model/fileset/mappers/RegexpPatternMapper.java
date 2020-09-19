@@ -27,8 +27,6 @@ import java.util.regex.Pattern;
  * name or it processed by a matching Regular Expression and its replacement. 
  *
  * <p>This is a RegexpPatternMapper for the copy and move tasks.</p>
- *
- * @version $Id$
  */
 public class RegexpPatternMapper
     implements FileNameMapper

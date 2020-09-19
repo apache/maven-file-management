@@ -19,14 +19,14 @@ package org.apache.maven.shared.model.fileset.mappers;
  * under the License.
  */
 
+import java.io.File;
+
 /**
  * Implementation of FileNameMapper that always returns the source
  * file name without any leading directory information.
  *
  * <p>This is the default FileNameMapper for the copy and move
  * tasks if the flatten attribute has been set.</p>
- *
- * @version $Id$
  */
 public class FlatFileNameMapper
     implements FileNameMapper
@@ -46,6 +46,6 @@ public class FlatFileNameMapper
     /** {@inheritDoc} */
     public String mapFileName( String sourceFileName )
     {
-        return new String( new java.io.File( sourceFileName ).getName() );
+        return new File( sourceFileName ).getName();
     }
 }

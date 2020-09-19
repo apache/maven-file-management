@@ -29,12 +29,9 @@ import org.junit.Test;
 
 /**
  * A test-case for the MapperUtil.
- * 
- * @version $Id$
  */
 public class MapperUtilTest
 {
-
     @Test
     public void getFileNameMapperShouldReturnNull()
         throws MapperException
@@ -69,16 +66,16 @@ public class MapperUtilTest
     @Test
     public void testGetFileNameMapper() throws MapperException
     {
-        Mapper mapper = null;
         try
         {
-            assertNull( MapperUtil.getFileNameMapper( mapper ) );
+            assertNull( MapperUtil.getFileNameMapper( null ) );
         }
         catch ( MapperException e )
         {
             fail( "Unexpected exception " + e );
         }
-        mapper = new Mapper();
+
+        Mapper mapper = new Mapper();
         try
         {
             // default to identity mapper.

@@ -27,8 +27,6 @@ import java.util.Properties;
 
 /**
  * Element to define a FileNameMapper.
- *
- * @version $Id$
  */
 public final class MapperUtil
 {
@@ -117,11 +115,7 @@ public final class MapperUtil
         {
             throw new MapperException( "Cannot find mapper implementation: " + classname, e );
         }
-        catch ( InstantiationException e )
-        {
-            throw new MapperException( "Cannot load mapper implementation: " + classname, e );
-        }
-        catch ( IllegalAccessException e )
+        catch ( InstantiationException | IllegalAccessException e )
         {
             throw new MapperException( "Cannot load mapper implementation: " + classname, e );
         }

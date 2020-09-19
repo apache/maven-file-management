@@ -24,8 +24,6 @@ package org.apache.maven.shared.model.fileset.mappers;
  *
  * <p>This is the default FileNameMapper for the copy and move
  * tasks.</p>
- *
- * @version $Id$
  */
 public class IdentityMapper
     implements FileNameMapper

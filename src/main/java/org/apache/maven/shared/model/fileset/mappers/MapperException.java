@@ -21,8 +21,6 @@ package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Mapper Exception
- *
- * @version $Id$
  */
 public class MapperException
     extends Exception

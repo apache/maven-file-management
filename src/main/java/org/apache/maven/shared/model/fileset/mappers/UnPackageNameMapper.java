@@ -30,8 +30,6 @@ import java.io.File;
  * &lt;mapper classname="org.apache.tools.ant.util.UnPackageNameMapper"
  *         from="${test.data.dir}/TEST-*Test.xml" to="*Test.java"&gt;
  * </pre>
- *
- * @version $Id$
  */
 public class UnPackageNameMapper
     extends GlobPatternMapper

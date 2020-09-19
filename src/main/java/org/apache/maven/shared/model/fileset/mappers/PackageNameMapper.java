@@ -29,8 +29,6 @@ import java.io.File;
  * &lt;mapper classname="org.apache.tools.ant.util.PackageNameMapper"
  *         from="*Test.java" to="${test.data.dir}/TEST-*Test.xml"/&gt;
  * </pre>
- *
- * @version $Id$
  */
 public class PackageNameMapper
     extends GlobPatternMapper

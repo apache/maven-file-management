@@ -27,8 +27,6 @@ package org.apache.maven.shared.model.fileset.mappers;
  * <p>The rule by which the file names are transformed is specified
  * via the setFrom and setTo methods. The exact meaning of these is
  * implementation dependent.</p>
- *
- * @version $Id$
  */
 public interface FileNameMapper
 {

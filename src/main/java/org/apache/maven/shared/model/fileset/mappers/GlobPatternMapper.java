@@ -30,8 +30,6 @@ package org.apache.maven.shared.model.fileset.mappers;
  *
  * <p>This is one of the more useful Mappers, it is used by <code>javac</code> for
  * example.</p>
- *
- * @version $Id$
  */
 public class GlobPatternMapper
     implements FileNameMapper
@@ -133,7 +131,7 @@ public class GlobPatternMapper
         {
             return null;
         }
-        return new String( toPrefix + extractVariablePart( sourceFileName ) + toPostfix );
+        return toPrefix + extractVariablePart( sourceFileName ) + toPostfix;
     }
 
     /**

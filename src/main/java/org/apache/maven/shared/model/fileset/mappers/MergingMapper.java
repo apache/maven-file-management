@@ -25,8 +25,6 @@ package org.apache.maven.shared.model.fileset.mappers;
  *
  * <p>This is the default FileNameMapper for the archiving tasks and
  * up-to-date.</p>
- *
- * @version $Id$
  */
 public class MergingMapper
     implements FileNameMapper

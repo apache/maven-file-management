@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +45,6 @@ import org.codehaus.plexus.logging.Logger;
  * matching entries, etc.
  *
  * @author jdcasey
- * @version $Id$
  */
 public class FileSetManager
 {
@@ -150,14 +148,12 @@ public class FileSetManager
         throws MapperException
     {
         String[] sourcePaths = getIncludedFiles( fileSet );
-        Map<String, String> mappedPaths = new LinkedHashMap<String, String>();
+        Map<String, String> mappedPaths = new LinkedHashMap<>();
 
         FileNameMapper fileMapper = MapperUtil.getFileNameMapper( fileSet.getMapper() );
 
-        for ( int i = 0; i < sourcePaths.length; i++ )
+        for ( String sourcePath : sourcePaths )
         {
-            String sourcePath = sourcePaths[i];
-
             String destPath;
             if ( fileMapper != null )
             {
@@ -277,12 +273,10 @@ public class FileSetManager
             messages.addDebugMessage( "Found deletable paths: " + paths ).flush();
         }
 
-        List<String> warnMessages = new LinkedList<String>();
+        List<String> warnMessages = new LinkedList<>();
 
-        for ( Iterator<String> it = deletablePaths.iterator(); it.hasNext(); )
+        for ( String path : deletablePaths )
         {
-            String path = it.next();
-
             File file = new File( fileSet.getDirectory(), path );
 
             if ( file.exists() )
@@ -343,9 +337,9 @@ public class FileSetManager
 
         if ( messages != null && messages.isWarningEnabled() && !throwsError && ( warnMessages.size() > 0 ) )
         {
-            for ( Iterator<String> it = warnMessages.iterator(); it.hasNext(); )
+            for ( String warnMessage : warnMessages )
             {
-                messages.addWarningMessage( it.next() ).flush();
+                messages.addWarningMessage( warnMessage ).flush();
             }
         }
     }
@@ -357,7 +351,7 @@ public class FileSetManager
     private boolean isSymlink( File file )
         throws IOException
     {
-        File fileInCanonicalParent = null;
+        File fileInCanonicalParent;
         File parentDir = file.getParentFile();
         if ( parentDir == null )
         {
@@ -395,12 +389,12 @@ public class FileSetManager
 
         if ( scanner == null )
         {
-            return Collections.<String>emptySet();
+            return Collections.emptySet();
         }
 
-        Set<String> includes = new HashSet<String>( Arrays.asList( scanner.getIncludedDirectories() ) );
-        List<String> excludes = new ArrayList<String>( Arrays.asList( scanner.getExcludedDirectories() ) );
-        List<String> linksForDeletion = new ArrayList<String>();
+        Set<String> includes = new HashSet<>( Arrays.asList( scanner.getIncludedDirectories() ) );
+        List<String> excludes = new ArrayList<>( Arrays.asList( scanner.getExcludedDirectories() ) );
+        List<String> linksForDeletion = new ArrayList<>();
 
         if ( !fileSet.isFollowSymlinks() )
         {
@@ -455,10 +449,9 @@ public class FileSetManager
             return deletableDirectories;
         }
 
-        Set<String> includes = deletableDirectories;
-        includes.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
-        List<String> excludes = new ArrayList<String>( Arrays.asList( scanner.getExcludedFiles() ) );
-        List<String> linksForDeletion = new ArrayList<String>();
+        deletableDirectories.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
+        List<String> excludes = new ArrayList<>( Arrays.asList( scanner.getExcludedFiles() ) );
+        List<String> linksForDeletion = new ArrayList<>();
 
         if ( !fileSet.isFollowSymlinks() )
         {
@@ -474,7 +467,7 @@ public class FileSetManager
 
             if ( messages != null && messages.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Originally marked for delete: " + includes ).flush();
+                messages.addDebugMessage( "Originally marked for delete: " + deletableDirectories ).flush();
                 messages.addDebugMessage( "Marked for preserve (with followSymlinks == false): " + excludes ).flush();
             }
 
@@ -492,11 +485,11 @@ public class FileSetManager
             excludes.removeAll( includedFilesAndSymlinks );
         }
 
-        excludeParentDirectoriesOfExcludedPaths( excludes, includes );
+        excludeParentDirectoriesOfExcludedPaths( excludes, deletableDirectories );
 
-        includes.addAll( linksForDeletion );
+        deletableDirectories.addAll( linksForDeletion );
 
-        return includes;
+        return deletableDirectories;
     }
 
     /**
@@ -510,18 +503,17 @@ public class FileSetManager
      */
     private void excludeParentDirectoriesOfExcludedPaths( List<String> excludedPaths, Set<String> deletablePaths )
     {
-        for ( Iterator<String> it = excludedPaths.iterator(); it.hasNext(); )
+        for ( String path : excludedPaths )
         {
-            String path = it.next();
-
             String parentPath = new File( path ).getParent();
 
             while ( parentPath != null )
             {
                 if ( messages != null && messages.isDebugEnabled() )
                 {
-                    messages.addDebugMessage( "Verifying path " + parentPath
-                        + " is not present; contains file which is excluded." ).flush();
+                    messages.addDebugMessage(
+                            "Verifying path " + parentPath + " is not present; contains file which is excluded." )
+                            .flush();
                 }
 
                 boolean removed = deletablePaths.remove( parentPath );
@@ -570,9 +562,8 @@ public class FileSetManager
             list = new String[0];
         }
 
-        for ( int i = 0; i < list.length; i++ )
+        for ( String s : list )
         {
-            String s = list[i];
             File f = new File( dir, s );
             if ( f.isDirectory() && ( followSymlinks || !isSymlink( f ) ) )
             {
