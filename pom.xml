@@ -51,7 +51,7 @@
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/MSHARED/component/12326425</url>
+    <url>https://issues.apache.org/jira/browse/MSHARED/</url>
   </issueManagement>
   <distributionManagement>
     <site>
@@ -61,7 +61,7 @@
   </distributionManagement>
   <properties>
     <javaVersion>7</javaVersion>
-    <mavenVersion>3.0</mavenVersion>
+    <mavenVersion>3.1.0</mavenVersion>
     <project.build.outputTimestamp>2020-04-04T09:03:59Z</project.build.outputTimestamp>
   </properties>
 
@@ -72,16 +72,11 @@
       <artifactId>maven-plugin-api</artifactId>
       <version>${mavenVersion}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-shared-io</artifactId>
-      <version>3.0.0</version>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-shared-utils</artifactId>
-      <version>3.2.1</version>
+      <version>3.3.3</version>
     </dependency>
 
     <dependency>
