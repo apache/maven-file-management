@@ -74,7 +74,7 @@ public final class MapperUtil
      *
      * @param mapper {@link Mapper}
      * @return {@link FileNameMapper}
-     * @throws MapperException in case of an error.
+     * @throws MapperException in case of an error
      */
     public static FileNameMapper getFileNameMapper( Mapper mapper )
         throws MapperException
