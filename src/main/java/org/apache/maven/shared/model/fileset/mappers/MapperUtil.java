@@ -20,7 +20,6 @@ package org.apache.maven.shared.model.fileset.mappers;
  */
 
 import org.apache.maven.shared.model.fileset.Mapper;
-import org.apache.maven.shared.utils.io.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,30 +52,19 @@ public final class MapperUtil
 
             ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 
-            InputStream stream = null;
-
-            try
+            try ( InputStream stream = cloader.getResourceAsStream( MAPPER_PROPERTIES ) )
             {
-                stream = cloader.getResourceAsStream( MAPPER_PROPERTIES );
-
                 if ( stream == null )
                 {
                     throw new IllegalStateException( "Cannot find classpath resource: " + MAPPER_PROPERTIES );
                 }
 
-                try
-                {
-                    props.load( stream );
-                    implementations = props;
-                }
-                catch ( IOException e )
-                {
-                    throw new IllegalStateException( "Cannot find classpath resource: " + MAPPER_PROPERTIES );
-                }
+                props.load( stream );
+                implementations = props;
             }
-            finally
+            catch ( IOException e )
             {
-                IOUtil.close( stream );
+                throw new IllegalStateException( "Cannot find classpath resource: " + MAPPER_PROPERTIES );
             }
         }
     }
