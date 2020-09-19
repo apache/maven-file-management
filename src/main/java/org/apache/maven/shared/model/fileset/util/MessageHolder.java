@@ -21,13 +21,9 @@ package org.apache.maven.shared.model.fileset.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 class MessageHolder
 {
-
-    private List<Message> messages = new ArrayList<Message>();
 
     private Message currentMessage;
 
@@ -99,7 +95,6 @@ class MessageHolder
         }
 
         currentMessage = new Message( messageLevel, onDemandSink );
-        messages.add( currentMessage );
     }
 
     private static final class Message
