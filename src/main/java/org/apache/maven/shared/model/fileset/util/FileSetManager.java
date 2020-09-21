@@ -31,13 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.mappers.FileNameMapper;
 import org.apache.maven.shared.model.fileset.mappers.MapperException;
 import org.apache.maven.shared.model.fileset.mappers.MapperUtil;
 import org.apache.maven.shared.utils.io.DirectoryScanner;
-import org.apache.maven.shared.utils.io.FileUtils;
 import org.codehaus.plexus.logging.Logger;
 
 /**
@@ -321,7 +321,7 @@ public class FileSetManager
                         messages.addInfoMessage( "Deleting file: " + file ).flush();
                     }
 
-                    if ( !delete( file ) )
+                    if ( !FileUtils.deleteQuietly( file ) )
                     {
                         String message = "Failed to delete file " + file.getAbsolutePath() + ". Reason is unknown.";
                         if ( throwsError )
@@ -571,7 +571,7 @@ public class FileSetManager
             }
             else
             {
-                if ( !delete( f ) )
+                if ( !FileUtils.deleteQuietly( f ) )
                 {
                     String message = "Unable to delete file " + f.getAbsolutePath();
                     if ( throwsError )
@@ -587,7 +587,7 @@ public class FileSetManager
             }
         }
 
-        if ( !delete( dir ) )
+        if ( !FileUtils.deleteQuietly( dir ) )
         {
             String message = "Unable to delete directory " + dir.getAbsolutePath();
             if ( throwsError )
@@ -600,25 +600,6 @@ public class FileSetManager
                 warnMessages.add( message );
             }
         }
-    }
-
-    /**
-     * Delete a file
-     *
-     * @param f a file
-     */
-    private boolean delete( File f )
-    {
-        try
-        {
-            FileUtils.forceDelete( f );
-        }
-        catch ( IOException e )
-        {
-            return false;
-        }
-
-        return true;
     }
 
     private DirectoryScanner scan( FileSet fileSet )

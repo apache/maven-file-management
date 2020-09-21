@@ -26,10 +26,10 @@ import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.Commandline;
-import org.apache.maven.shared.utils.io.FileUtils;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -343,11 +343,6 @@ public class FileSetUtilsTest
         return result == 0;
     }
 
-    /**
-     * @param directoryName
-     * @return
-     * @throws IOException
-     */
     private File setupTestDirectory( String directoryName )
         throws IOException
     {
@@ -364,12 +359,12 @@ public class FileSetUtilsTest
         String testBase = System.getProperty( "testBase", "target/test-directories" );
 
         File testDir = new File( basedir, testBase + "/" + directoryName );
-        testDir.mkdirs();
-
-        FileUtils.copyDirectoryStructure( sourceDir, testDir );
-
-        testDirectories.add( testDir );
-
-        return testDir;
+        if ( testDir.mkdirs() ) {
+            FileUtils.copyDirectory( sourceDir, testDir );
+            testDirectories.add( testDir );
+            return testDir;
+        } else {
+            throw new IOException( "Could not create test directory " + testDir );
+        }
     }
 }
