@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>42</version>
+    <version>43-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -61,7 +61,19 @@
       <url>scm:svn:https://svn.apache.org/repos/asf/maven/website/components/${maven.site.path}</url>
     </site>
   </distributionManagement>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-xml</artifactId>
+        <version>4.0.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <properties>
+    <javaVersion>17</javaVersion>
+    <mavenVersion>4.0.0-alpha-9</mavenVersion>
     <slf4jVersion>1.7.36</slf4jVersion>
     <project.build.outputTimestamp>2022-06-29T11:20:20Z</project.build.outputTimestamp>
   </properties>
