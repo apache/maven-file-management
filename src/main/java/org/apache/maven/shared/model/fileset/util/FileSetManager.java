@@ -39,7 +39,6 @@ import org.apache.maven.shared.model.fileset.mappers.MapperException;
 import org.apache.maven.shared.model.fileset.mappers.MapperUtil;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
 
@@ -112,7 +111,8 @@ public class FileSetManager
      */
     public FileSetManager()
     {
-        this( LoggerFactory.getLogger( FileSetManager.class ), false );
+        this.messageSink = new NoopLogSink();
+        this.verbose = false;
     }
 
     // ----------------------------------------------------------------------
