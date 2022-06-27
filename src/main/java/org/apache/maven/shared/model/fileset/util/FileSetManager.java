@@ -41,6 +41,8 @@ import org.codehaus.plexus.util.DirectoryScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Provides operations for use with FileSet instances, such as retrieving the included/excluded files, deleting all
  * matching entries, etc.
@@ -67,6 +69,7 @@ public class FileSetManager
      */
     public FileSetManager( Log log, boolean verbose )
     {
+        requireNonNull( log );
         this.messageSink = new MojoLogSink( log );
         this.verbose = verbose;
     }
@@ -89,6 +92,7 @@ public class FileSetManager
      */
     public FileSetManager( Logger log, boolean verbose )
     {
+        requireNonNull( log );
         this.messageSink = new Slf4jLoggerSink( log );
         this.verbose = verbose;
     }
