@@ -33,7 +33,7 @@ import java.io.File;
 public class PackageNameMapper
     extends GlobPatternMapper
 {
-    /** {@inheritDoc} */
+    @Override
     protected String extractVariablePart( String name )
     {
         String var = name.substring( prefixLength, name.length() - postfixLength );

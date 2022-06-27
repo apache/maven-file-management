@@ -31,19 +31,19 @@ import java.io.File;
 public class FlatFileNameMapper
     implements FileNameMapper
 {
-    /** {@inheritDoc} */
+    @Override
     public void setFrom( String from )
     {
         // nop
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setTo( String to )
     {
         // nop
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String mapFileName( String sourceFileName )
     {
         return new File( sourceFileName ).getName();

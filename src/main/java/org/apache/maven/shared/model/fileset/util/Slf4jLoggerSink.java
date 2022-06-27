@@ -19,45 +19,52 @@ package org.apache.maven.shared.model.fileset.util;
  * under the License.
  */
 
-import org.codehaus.plexus.logging.Logger;
+import org.slf4j.Logger;
 
-/**
- * The plexus logger sink implementation.
- */
-class PlexusLoggerSink
+class Slf4jLoggerSink
     implements MessageSink
 {
 
     private final Logger logger;
 
-    PlexusLoggerSink( Logger logger )
+    Slf4jLoggerSink( Logger logger )
     {
         this.logger = logger;
     }
 
+    @Override
+    public boolean isDebugEnabled()
+    {
+        return logger.isDebugEnabled();
+    }
+
+    @Override
     public void debug( String message )
     {
         logger.debug( message );
     }
 
-    public void error( String message )
-    {
-        logger.error( message );
-    }
-
+    @Override
     public void info( String message )
     {
         logger.info( message );
     }
 
-    public void severe( String message )
+    @Override
+    public boolean isWarningEnabled()
     {
-        logger.fatalError( message );
+        return logger.isWarnEnabled();
     }
 
+    @Override
     public void warning( String message )
     {
         logger.warn( message );
     }
 
+    @Override
+    public void error( String message )
+    {
+        logger.error( message );
+    }
 }

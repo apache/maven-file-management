@@ -32,29 +32,39 @@ class MojoLogSink
         this.logger = logger;
     }
 
+    @Override
+    public boolean isDebugEnabled()
+    {
+        return logger.isDebugEnabled();
+    }
+
+    @Override
     public void debug( String message )
     {
         logger.debug( message );
     }
 
-    public void error( String message )
-    {
-        logger.error( message );
-    }
-
+    @Override
     public void info( String message )
     {
         logger.info( message );
     }
 
-    public void severe( String message )
+    @Override
+    public boolean isWarningEnabled()
     {
-        logger.error( message );
+        return logger.isWarnEnabled();
     }
 
+    @Override
     public void warning( String message )
     {
         logger.warn( message );
     }
 
+    @Override
+    public void error( String message )
+    {
+        logger.error( message );
+    }
 }

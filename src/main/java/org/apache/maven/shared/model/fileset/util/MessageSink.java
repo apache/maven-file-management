@@ -21,15 +21,15 @@ package org.apache.maven.shared.model.fileset.util;
 
 interface MessageSink
 {
+    boolean isDebugEnabled();
 
     void debug( String message );
 
     void info( String message );
 
+    boolean isWarningEnabled();
+
     void warning( String message );
 
     void error( String message );
-
-    void severe( String message );
-
 }

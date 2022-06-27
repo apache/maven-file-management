@@ -28,19 +28,19 @@ package org.apache.maven.shared.model.fileset.mappers;
 public class IdentityMapper
     implements FileNameMapper
 {
-    /** {@inheritDoc} */
+    @Override
     public void setFrom( String from )
     {
         // nop
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setTo( String to )
     {
         // nop
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String mapFileName( String sourceFileName )
     {
         return sourceFileName;

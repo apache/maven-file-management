@@ -89,7 +89,7 @@ public class GlobPatternMapper
         this.caseSensitive = caseSensitive;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setFrom( String from )
     {
         int index = from.lastIndexOf( "*" );
@@ -107,7 +107,7 @@ public class GlobPatternMapper
         postfixLength = fromPostfix.length();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setTo( String to )
     {
         int index = to.lastIndexOf( "*" );
@@ -123,7 +123,7 @@ public class GlobPatternMapper
         }
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String mapFileName( String sourceFileName )
     {
         if ( fromPrefix == null || !modifyName( sourceFileName ).startsWith( modifyName( fromPrefix ) )
