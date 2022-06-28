@@ -31,19 +31,19 @@ public class MergingMapper
 {
     private String mergedFile = null;
 
-    /** {@inheritDoc} */
+    @Override
     public void setFrom( String from )
     {
         // nop
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setTo( String to )
     {
         mergedFile = to;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String mapFileName( String sourceFileName )
     {
         return mergedFile;

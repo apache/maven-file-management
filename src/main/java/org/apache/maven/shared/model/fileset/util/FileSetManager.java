@@ -32,13 +32,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.mappers.FileNameMapper;
 import org.apache.maven.shared.model.fileset.mappers.MapperException;
 import org.apache.maven.shared.model.fileset.mappers.MapperUtil;
-import org.apache.maven.shared.utils.io.DirectoryScanner;
-import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Provides operations for use with FileSet instances, such as retrieving the included/excluded files, deleting all
@@ -52,7 +54,7 @@ public class FileSetManager
 
     private final boolean verbose;
 
-    private MessageHolder messages;
+    private final Logger logger;
 
     // ----------------------------------------------------------------------
     // Constructors
@@ -61,77 +63,31 @@ public class FileSetManager
     /**
      * Create a new manager instance with the supplied log instance and flag for whether to output verbose messages.
      *
-     * @param log the mojo log instance
+     * @param logger the logger instance
      * @param verbose whether to output verbose messages
      */
-    public FileSetManager( Log log, boolean verbose )
+    public FileSetManager( Logger logger, boolean verbose )
     {
-        if ( verbose )
-        {
-            this.messages =
-                new MessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
-        }
-        else
-        {
-            this.messages =
-                new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
-        }
-
+        this.logger = requireNonNull( logger );
         this.verbose = verbose;
     }
 
     /**
      * Create a new manager instance with the supplied log instance. Verbose flag is set to false.
      *
-     * @param log The mojo log instance
+     * @param logger The log instance
      */
-    public FileSetManager( Log log )
+    public FileSetManager( Logger logger )
     {
-        this.messages =
-            new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new MojoLogSink( log ) );
-        this.verbose = false;
+        this( logger, false );
     }
 
     /**
-     * Create a new manager instance with the supplied log instance and flag for whether to output verbose messages.
-     *
-     * @param log The mojo log instance
-     * @param verbose Whether to output verbose messages
-     */
-    public FileSetManager( Logger log, boolean verbose )
-    {
-        if ( verbose )
-        {
-            this.messages = new MessageHolder( MessageLevels.LEVEL_DEBUG, MessageLevels.LEVEL_INFO,
-                                                      new PlexusLoggerSink( log ) );
-        }
-        else
-        {
-            this.messages = new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO,
-                                                      new PlexusLoggerSink( log ) );
-        }
-
-        this.verbose = verbose;
-    }
-
-    /**
-     * Create a new manager instance with the supplied log instance. Verbose flag is set to false.
-     *
-     * @param log The mojo log instance
-     */
-    public FileSetManager( Logger log )
-    {
-        this.messages =
-            new MessageHolder( MessageLevels.LEVEL_INFO, MessageLevels.LEVEL_INFO, new PlexusLoggerSink( log ) );
-        this.verbose = false;
-    }
-
-    /**
-     * Create a new manager instance with an empty messages. Verbose flag is set to false.
+     * Create a new manager instance with an own logger. Verbose flag is set to false.
      */
     public FileSetManager()
     {
-        this.verbose = false;
+        this( LoggerFactory.getLogger( FileSetManager.class ), false );
     }
 
     // ----------------------------------------------------------------------
@@ -267,10 +223,10 @@ public class FileSetManager
     {
         Set<String> deletablePaths = findDeletablePaths( fileSet );
 
-        if ( messages != null && messages.isDebugEnabled() )
+        if ( logger.isDebugEnabled() )
         {
             String paths = String.valueOf( deletablePaths ).replace( ',', '\n' );
-            messages.addDebugMessage( "Found deletable paths: " + paths ).flush();
+            logger.debug( "Found deletable paths: " + paths );
         }
 
         List<String> warnMessages = new LinkedList<>();
@@ -285,18 +241,18 @@ public class FileSetManager
                 {
                     if ( fileSet.isFollowSymlinks() || !isSymlink( file ) )
                     {
-                        if ( verbose && messages != null )
+                        if ( verbose )
                         {
-                            messages.addInfoMessage( "Deleting directory: " + file ).flush();
+                            logger.info( "Deleting directory: " + file );
                         }
 
                         removeDir( file, fileSet.isFollowSymlinks(), throwsError, warnMessages );
                     }
                     else
                     { // delete a symlink to a directory without follow
-                        if ( verbose && messages != null )
+                        if ( verbose )
                         {
-                            messages.addInfoMessage( "Deleting symlink to directory: " + file ).flush();
+                            logger.info( "Deleting symlink to directory: " + file );
                         }
 
                         if ( !file.delete() )
@@ -316,9 +272,9 @@ public class FileSetManager
                 }
                 else
                 {
-                    if ( verbose && messages != null )
+                    if ( verbose )
                     {
-                        messages.addInfoMessage( "Deleting file: " + file ).flush();
+                        logger.info( "Deleting file: " + file );
                     }
 
                     if ( !FileUtils.deleteQuietly( file ) )
@@ -335,11 +291,11 @@ public class FileSetManager
             }
         }
 
-        if ( messages != null && messages.isWarningEnabled() && !throwsError && ( warnMessages.size() > 0 ) )
+        if ( logger.isWarnEnabled() && !throwsError && ( warnMessages.size() > 0 ) )
         {
             for ( String warnMessage : warnMessages )
             {
-                messages.addWarningMessage( warnMessage ).flush();
+                logger.warn( warnMessage );
             }
         }
     }
@@ -361,11 +317,11 @@ public class FileSetManager
         {
             fileInCanonicalParent = new File( parentDir.getCanonicalPath(), file.getName() );
         }
-        if ( messages != null && messages.isDebugEnabled() )
+        if ( logger.isDebugEnabled() )
         {
-            messages.addDebugMessage( "Checking for symlink:\nFile's canonical path: "
+            logger.debug( "Checking for symlink:\nFile's canonical path: "
                 + fileInCanonicalParent.getCanonicalPath() + "\nFile's absolute path with canonical parent: "
-                + fileInCanonicalParent.getPath() ).flush();
+                + fileInCanonicalParent.getPath() );
         }
         return !fileInCanonicalParent.getCanonicalFile().equals( fileInCanonicalParent.getAbsoluteFile() );
     }
@@ -380,9 +336,9 @@ public class FileSetManager
 
     private Set<String> findDeletableDirectories( FileSet fileSet )
     {
-        if ( verbose && messages != null )
+        if ( verbose )
         {
-            messages.addInfoMessage( "Scanning for deletable directories." ).flush();
+            logger.info( "Scanning for deletable directories." );
         }
 
         DirectoryScanner scanner = scan( fileSet );
@@ -398,20 +354,20 @@ public class FileSetManager
 
         if ( !fileSet.isFollowSymlinks() )
         {
-            if ( verbose && messages != null )
+            if ( verbose )
             {
-                messages.addInfoMessage( "Adding symbolic link dirs which were previously excluded"
-                    + " to the list being deleted." ).flush();
+                logger.info( "Adding symbolic link dirs which were previously excluded"
+                    + " to the list being deleted." );
             }
 
             // we need to see which entries were only excluded because they're symlinks...
             scanner.setFollowSymlinks( true );
             scanner.scan();
 
-            if ( messages != null && messages.isDebugEnabled() )
+            if ( logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Originally marked for delete: " + includes ).flush();
-                messages.addDebugMessage( "Marked for preserve (with followSymlinks == false): " + excludes ).flush();
+                logger.debug( "Originally marked for delete: " + includes );
+                logger.debug( "Marked for preserve (with followSymlinks == false): " + excludes );
             }
 
             List<String> includedDirsAndSymlinks = Arrays.asList( scanner.getIncludedDirectories() );
@@ -419,10 +375,10 @@ public class FileSetManager
             linksForDeletion.addAll( excludes );
             linksForDeletion.retainAll( includedDirsAndSymlinks );
 
-            if ( messages != null && messages.isDebugEnabled() )
+            if ( logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Symlinks marked for deletion (originally mismarked): "
-                    + linksForDeletion ).flush();
+                logger.debug( "Symlinks marked for deletion (originally mismarked): "
+                    + linksForDeletion );
             }
 
             excludes.removeAll( includedDirsAndSymlinks );
@@ -437,9 +393,9 @@ public class FileSetManager
 
     private Set<String> findDeletableFiles( FileSet fileSet, Set<String> deletableDirectories )
     {
-        if ( verbose && messages != null )
+        if ( verbose )
         {
-            messages.addInfoMessage( "Re-scanning for deletable files." ).flush();
+            logger.info( "Re-scanning for deletable files." );
         }
 
         DirectoryScanner scanner = scan( fileSet );
@@ -455,20 +411,20 @@ public class FileSetManager
 
         if ( !fileSet.isFollowSymlinks() )
         {
-            if ( verbose && messages != null )
+            if ( verbose )
             {
-                messages.addInfoMessage( "Adding symbolic link files which were previously excluded "
-                    + "to the list being deleted." ).flush();
+                logger.info( "Adding symbolic link files which were previously excluded "
+                    + "to the list being deleted." );
             }
 
             // we need to see which entries were only excluded because they're symlinks...
             scanner.setFollowSymlinks( true );
             scanner.scan();
 
-            if ( messages != null && messages.isDebugEnabled() )
+            if ( logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Originally marked for delete: " + deletableDirectories ).flush();
-                messages.addDebugMessage( "Marked for preserve (with followSymlinks == false): " + excludes ).flush();
+                logger.debug( "Originally marked for delete: " + deletableDirectories );
+                logger.debug( "Marked for preserve (with followSymlinks == false): " + excludes );
             }
 
             List<String> includedFilesAndSymlinks = Arrays.asList( scanner.getIncludedFiles() );
@@ -476,10 +432,10 @@ public class FileSetManager
             linksForDeletion.addAll( excludes );
             linksForDeletion.retainAll( includedFilesAndSymlinks );
 
-            if ( messages != null && messages.isDebugEnabled() )
+            if ( logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Symlinks marked for deletion (originally mismarked): "
-                    + linksForDeletion ).flush();
+                logger.debug( "Symlinks marked for deletion (originally mismarked): "
+                    + linksForDeletion );
             }
 
             excludes.removeAll( includedFilesAndSymlinks );
@@ -509,18 +465,17 @@ public class FileSetManager
 
             while ( parentPath != null )
             {
-                if ( messages != null && messages.isDebugEnabled() )
+                if ( logger.isDebugEnabled() )
                 {
-                    messages.addDebugMessage(
-                            "Verifying path " + parentPath + " is not present; contains file which is excluded." )
-                            .flush();
+                    logger.debug(
+                            "Verifying path " + parentPath + " is not present; contains file which is excluded." );
                 }
 
                 boolean removed = deletablePaths.remove( parentPath );
 
-                if ( removed && messages != null && messages.isDebugEnabled() )
+                if ( removed && logger.isDebugEnabled() )
                 {
-                    messages.addDebugMessage( "Path " + parentPath + " was removed from delete list." ).flush();
+                    logger.debug( "Path " + parentPath + " was removed from delete list." );
                 }
 
                 parentPath = new File( parentPath ).getParent();
@@ -529,17 +484,17 @@ public class FileSetManager
 
         if ( !excludedPaths.isEmpty() )
         {
-            if ( messages != null && messages.isDebugEnabled() )
+            if ( logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Verifying path " + "."
-                    + " is not present; contains file which is excluded." ).flush();
+                logger.debug( "Verifying path " + "."
+                    + " is not present; contains file which is excluded." );
             }
 
             boolean removed = deletablePaths.remove( "" );
 
-            if ( removed && messages != null && messages.isDebugEnabled() )
+            if ( removed && logger.isDebugEnabled() )
             {
-                messages.addDebugMessage( "Path " + "." + " was removed from delete list." ).flush();
+                logger.debug( "Path " + "." + " was removed from delete list." );
             }
         }
     }

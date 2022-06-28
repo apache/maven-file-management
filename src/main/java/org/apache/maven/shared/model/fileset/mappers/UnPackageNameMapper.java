@@ -34,7 +34,7 @@ import java.io.File;
 public class UnPackageNameMapper
     extends GlobPatternMapper
 {
-    /** {@inheritDoc} */
+    @Override
     protected String extractVariablePart( String name )
     {
         String var = name.substring( prefixLength, name.length() - postfixLength );

@@ -28,11 +28,10 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
-import org.apache.maven.shared.utils.cli.CommandLineException;
-import org.apache.maven.shared.utils.cli.Commandline;
 
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -85,11 +84,10 @@ public class FileSetUtilsTest
     /**
      * @throws IOException if any
      * @throws InterruptedException if any
-     * @throws org.apache.maven.shared.utils.cli.CommandLineException if any
      */
     @Test
     public void testIncludesDontFollowSymlinks()
-        throws IOException, InterruptedException, CommandLineException
+            throws IOException, InterruptedException, CommandLineException
     {
         File directory = setupTestDirectory( "testIncludesDontFollowSymlinks" );
         File subdir = new File( directory, directory.getName() );
@@ -323,7 +321,8 @@ public class FileSetUtilsTest
      * @throws CommandLineException
      */
     private boolean createSymlink( File target, File link )
-        throws InterruptedException, CommandLineException
+            throws InterruptedException, CommandLineException
+
     {
         if ( link.exists() )
         {

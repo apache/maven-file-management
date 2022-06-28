@@ -34,19 +34,19 @@ public class RegexpPatternMapper
     private Pattern fromPattern;
     private String toReplaceExpression;
 
-    /** {@inheritDoc} */
+    @Override
     public void setFrom( String from )
     {
         this.fromPattern = Pattern.compile( from );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setTo( String to )
     {
         this.toReplaceExpression = to;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String mapFileName( String sourceFileName )
     {
         Matcher matcher = this.fromPattern.matcher( sourceFileName );
