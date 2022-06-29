@@ -44,8 +44,8 @@
   </contributors>
 
   <scm>
-    <connection>scm:git:https://gitbox.apache.org/repos/asf?p=maven-file-management.git</connection>
-    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf?p=maven-file-management.git</developerConnection>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-file-management.git</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-file-management.git</developerConnection>
     <url>https://github.com/apache/maven-file-management/tree/${project.scm.tag}</url>
     <tag>HEAD</tag>
   </scm>
