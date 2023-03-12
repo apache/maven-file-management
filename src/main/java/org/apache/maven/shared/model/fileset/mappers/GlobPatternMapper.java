@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Implementation of FileNameMapper that does simple wildcard pattern
@@ -31,9 +30,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * <p>This is one of the more useful Mappers, it is used by <code>javac</code> for
  * example.</p>
  */
-public class GlobPatternMapper
-    implements FileNameMapper
-{
+public class GlobPatternMapper implements FileNameMapper {
     /**
      * Part of &quot;from&quot; pattern before the *.
      */
@@ -73,8 +70,7 @@ public class GlobPatternMapper
      * between / and \ (the two common directory characters).
      * @param handleDirSep a boolean, default is false.
      */
-    public void setHandleDirSep( boolean handleDirSep )
-    {
+    public void setHandleDirSep(boolean handleDirSep) {
         this.handleDirSep = handleDirSep;
     }
 
@@ -84,54 +80,44 @@ public class GlobPatternMapper
      *
      * @param caseSensitive a boolean, default is false.
      */
-    public void setCaseSensitive( boolean caseSensitive )
-    {
+    public void setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
     }
 
     @Override
-    public void setFrom( String from )
-    {
-        int index = from.lastIndexOf( "*" );
-        if ( index == -1 )
-        {
+    public void setFrom(String from) {
+        int index = from.lastIndexOf("*");
+        if (index == -1) {
             fromPrefix = from;
             fromPostfix = "";
-        }
-        else
-        {
-            fromPrefix = from.substring( 0, index );
-            fromPostfix = from.substring( index + 1 );
+        } else {
+            fromPrefix = from.substring(0, index);
+            fromPostfix = from.substring(index + 1);
         }
         prefixLength = fromPrefix.length();
         postfixLength = fromPostfix.length();
     }
 
     @Override
-    public void setTo( String to )
-    {
-        int index = to.lastIndexOf( "*" );
-        if ( index == -1 )
-        {
+    public void setTo(String to) {
+        int index = to.lastIndexOf("*");
+        if (index == -1) {
             toPrefix = to;
             toPostfix = "";
-        }
-        else
-        {
-            toPrefix = to.substring( 0, index );
-            toPostfix = to.substring( index + 1 );
+        } else {
+            toPrefix = to.substring(0, index);
+            toPostfix = to.substring(index + 1);
         }
     }
 
     @Override
-    public String mapFileName( String sourceFileName )
-    {
-        if ( fromPrefix == null || !modifyName( sourceFileName ).startsWith( modifyName( fromPrefix ) )
-            || !modifyName( sourceFileName ).endsWith( modifyName( fromPostfix ) ) )
-        {
+    public String mapFileName(String sourceFileName) {
+        if (fromPrefix == null
+                || !modifyName(sourceFileName).startsWith(modifyName(fromPrefix))
+                || !modifyName(sourceFileName).endsWith(modifyName(fromPostfix))) {
             return null;
         }
-        return toPrefix + extractVariablePart( sourceFileName ) + toPostfix;
+        return toPrefix + extractVariablePart(sourceFileName) + toPostfix;
     }
 
     /**
@@ -140,9 +126,8 @@ public class GlobPatternMapper
      * @param name the source file name
      * @return the variable part of the name
      */
-    protected String extractVariablePart( String name )
-    {
-        return name.substring( prefixLength, name.length() - postfixLength );
+    protected String extractVariablePart(String name) {
+        return name.substring(prefixLength, name.length() - postfixLength);
     }
 
     /**
@@ -150,17 +135,13 @@ public class GlobPatternMapper
      * @param name the name to convert
      * @return the converted name
      */
-    private String modifyName( String name )
-    {
-        if ( !caseSensitive )
-        {
+    private String modifyName(String name) {
+        if (!caseSensitive) {
             name = name.toLowerCase();
         }
-        if ( handleDirSep )
-        {
-            if ( name.indexOf( '\\' ) != -1 )
-            {
-                name = name.replace( '\\', '/' );
+        if (handleDirSep) {
+            if (name.indexOf('\\') != -1) {
+                name = name.replace('\\', '/');
             }
         }
         return name;

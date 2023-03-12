@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 import java.io.File;
 
@@ -30,13 +29,10 @@ import java.io.File;
  *         from="*Test.java" to="${test.data.dir}/TEST-*Test.xml"/&gt;
  * </pre>
  */
-public class PackageNameMapper
-    extends GlobPatternMapper
-{
+public class PackageNameMapper extends GlobPatternMapper {
     @Override
-    protected String extractVariablePart( String name )
-    {
-        String var = name.substring( prefixLength, name.length() - postfixLength );
-        return var.replace( File.separatorChar, '.' );
+    protected String extractVariablePart(String name) {
+        String var = name.substring(prefixLength, name.length() - postfixLength);
+        return var.replace(File.separatorChar, '.');
     }
 }
