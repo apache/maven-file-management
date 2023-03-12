@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,13 +16,12 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Mapper Exception
  */
-public class MapperException
-    extends Exception
-{
+public class MapperException extends Exception {
     static final long serialVersionUID = 20064059145045044L;
 
     /**
@@ -33,9 +30,8 @@ public class MapperException
      * @param message The error message
      * @param cause The root cause of the problem.
      */
-    public MapperException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public MapperException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /**
@@ -43,8 +39,7 @@ public class MapperException
      *
      * @param message The error message.
      */
-    public MapperException( String message )
-    {
-        super( message );
+    public MapperException(String message) {
+        super(message);
     }
 }

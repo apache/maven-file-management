@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,43 +16,38 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Implementation of RegexpPatternMapper that returns either the source file
- * name or it processed by a matching Regular Expression and its replacement. 
+ * name or it processed by a matching Regular Expression and its replacement.
  *
  * <p>This is a RegexpPatternMapper for the copy and move tasks.</p>
  */
-public class RegexpPatternMapper
-    implements FileNameMapper
-{
+public class RegexpPatternMapper implements FileNameMapper {
     private Pattern fromPattern;
     private String toReplaceExpression;
 
     @Override
-    public void setFrom( String from )
-    {
-        this.fromPattern = Pattern.compile( from );
+    public void setFrom(String from) {
+        this.fromPattern = Pattern.compile(from);
     }
 
     @Override
-    public void setTo( String to )
-    {
+    public void setTo(String to) {
         this.toReplaceExpression = to;
     }
 
     @Override
-    public String mapFileName( String sourceFileName )
-    {
-        Matcher matcher = this.fromPattern.matcher( sourceFileName );
-        if ( !matcher.find( ) )
-        {
+    public String mapFileName(String sourceFileName) {
+        Matcher matcher = this.fromPattern.matcher(sourceFileName);
+        if (!matcher.find()) {
             return sourceFileName;
         }
 
-        return matcher.replaceFirst( this.toReplaceExpression );
+        return matcher.replaceFirst(this.toReplaceExpression);
     }
 }

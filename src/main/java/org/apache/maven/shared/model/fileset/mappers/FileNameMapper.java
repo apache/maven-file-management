@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Interface used by SourceFileScanner
@@ -28,21 +27,20 @@ package org.apache.maven.shared.model.fileset.mappers;
  * via the setFrom and setTo methods. The exact meaning of these is
  * implementation dependent.</p>
  */
-public interface FileNameMapper
-{
+public interface FileNameMapper {
     /**
      * Sets the from part of the transformation rule.
      *
      * @param from the source
      */
-    void setFrom( String from );
+    void setFrom(String from);
 
     /**
      * Sets the to part of the transformation rule.
      *
      * @param to the destination
      */
-    void setTo( String to );
+    void setTo(String to);
 
     /**
      * Returns the target filename for the
@@ -55,5 +53,5 @@ public interface FileNameMapper
      * @param sourceFileName the name of the source file relative to some given base directory
      * @return the target filename for the given source file
      */
-    String mapFileName( String sourceFileName );
+    String mapFileName(String sourceFileName);
 }

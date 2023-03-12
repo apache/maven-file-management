@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,83 +16,70 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
+
+import org.apache.maven.shared.model.fileset.Mapper;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.apache.maven.shared.model.fileset.Mapper;
-import org.junit.Test;
-
 /**
  * A test-case for the MapperUtil.
  */
-public class MapperUtilTest
-{
+public class MapperUtilTest {
     @Test
-    public void getFileNameMapperShouldReturnNull()
-        throws MapperException
-    {
-        assertNull( MapperUtil.getFileNameMapper( null ) );
+    public void getFileNameMapperShouldReturnNull() throws MapperException {
+        assertNull(MapperUtil.getFileNameMapper(null));
     }
 
     @Test
-    public void getFileNameMapperShouldReturnIdentityMapper()
-        throws MapperException
-    {
+    public void getFileNameMapperShouldReturnIdentityMapper() throws MapperException {
         Mapper mapper = new Mapper();
-        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper( mapper );
-        assertNotNull( fileNameMapper );
-        assertEquals( "/var/some-file.text", fileNameMapper.mapFileName( "/var/some-file.text" ) );
+        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
+        assertNotNull(fileNameMapper);
+        assertEquals("/var/some-file.text", fileNameMapper.mapFileName("/var/some-file.text"));
     }
 
     @Test
-    public void getFileNameMapperShouldFileNameMapperType()
-        throws MapperException
-    {
+    public void getFileNameMapperShouldFileNameMapperType() throws MapperException {
         // check with FileNameMapper type
         Mapper mapper = new Mapper();
-        mapper.setType( "glob" );
-        mapper.setFrom( "*.java" );
-        mapper.setTo( "*.class" );
-        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper( mapper );
-        assertNotNull( fileNameMapper );
-        assertEquals( "/var/SomeClasses.class", fileNameMapper.mapFileName( "/var/SomeClasses.java" ) );
+        mapper.setType("glob");
+        mapper.setFrom("*.java");
+        mapper.setTo("*.class");
+        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
+        assertNotNull(fileNameMapper);
+        assertEquals("/var/SomeClasses.class", fileNameMapper.mapFileName("/var/SomeClasses.java"));
     }
 
     @Test
-    public void testGetFileNameMapper() throws MapperException
-    {
-        try
-        {
-            assertNull( MapperUtil.getFileNameMapper( null ) );
-        }
-        catch ( MapperException e )
-        {
-            fail( "Unexpected exception " + e );
+    public void testGetFileNameMapper() throws MapperException {
+        try {
+            assertNull(MapperUtil.getFileNameMapper(null));
+        } catch (MapperException e) {
+            fail("Unexpected exception " + e);
         }
 
         Mapper mapper = new Mapper();
-        try
-        {
+        try {
             // default to identity mapper.
-            FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper( mapper );
-            assertNotNull( fileNameMapper );
-            assertEquals( "/var/some-file.text", fileNameMapper.mapFileName( "/var/some-file.text" ) );
-        }
-        catch ( MapperException e )
-        {
-            fail( "Unexpected exception " + e );
+            FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
+            assertNotNull(fileNameMapper);
+            assertEquals("/var/some-file.text", fileNameMapper.mapFileName("/var/some-file.text"));
+        } catch (MapperException e) {
+            fail("Unexpected exception " + e);
         }
         // check with FileNameMapper type
         mapper = new Mapper();
-        mapper.setType( "glob" );
-        mapper.setFrom( "*.java" );
-        mapper.setTo( "*.class" );
+        mapper.setType("glob");
+        mapper.setFrom("*.java");
+        mapper.setTo("*.class");
 
-        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper( mapper );
-        assertNotNull( fileNameMapper );
-        assertEquals( "/var/SomeClasses.class", fileNameMapper.mapFileName( "/var/SomeClasses.java" ) );
+        FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
+        assertNotNull(fileNameMapper);
+        assertEquals("/var/SomeClasses.class", fileNameMapper.mapFileName("/var/SomeClasses.java"));
     }
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Implementation of FileNameMapper that always returns the same
@@ -26,26 +25,21 @@ package org.apache.maven.shared.model.fileset.mappers;
  * <p>This is the default FileNameMapper for the archiving tasks and
  * up-to-date.</p>
  */
-public class MergingMapper
-    implements FileNameMapper
-{
+public class MergingMapper implements FileNameMapper {
     private String mergedFile = null;
 
     @Override
-    public void setFrom( String from )
-    {
+    public void setFrom(String from) {
         // nop
     }
 
     @Override
-    public void setTo( String to )
-    {
+    public void setTo(String to) {
         mergedFile = to;
     }
 
     @Override
-    public String mapFileName( String sourceFileName )
-    {
+    public String mapFileName(String sourceFileName) {
         return mergedFile;
     }
 }

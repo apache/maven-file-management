@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.mappers;
 
 /**
  * Implementation of FileNameMapper that always returns the source file name.
@@ -25,24 +24,19 @@ package org.apache.maven.shared.model.fileset.mappers;
  * <p>This is the default FileNameMapper for the copy and move
  * tasks.</p>
  */
-public class IdentityMapper
-    implements FileNameMapper
-{
+public class IdentityMapper implements FileNameMapper {
     @Override
-    public void setFrom( String from )
-    {
+    public void setFrom(String from) {
         // nop
     }
 
     @Override
-    public void setTo( String to )
-    {
+    public void setTo(String to) {
         // nop
     }
 
     @Override
-    public String mapFileName( String sourceFileName )
-    {
+    public String mapFileName(String sourceFileName) {
         return sourceFileName;
     }
 }

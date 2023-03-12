@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.util;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.model.fileset.util;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.model.fileset.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +47,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author jdcasey
  */
-public class FileSetManager
-{
+public class FileSetManager {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     private final boolean verbose;
@@ -66,9 +64,8 @@ public class FileSetManager
      * @param logger the logger instance
      * @param verbose whether to output verbose messages
      */
-    public FileSetManager( Logger logger, boolean verbose )
-    {
-        this.logger = requireNonNull( logger );
+    public FileSetManager(Logger logger, boolean verbose) {
+        this.logger = requireNonNull(logger);
         this.verbose = verbose;
     }
 
@@ -77,17 +74,15 @@ public class FileSetManager
      *
      * @param logger The log instance
      */
-    public FileSetManager( Logger logger )
-    {
-        this( logger, false );
+    public FileSetManager(Logger logger) {
+        this(logger, false);
     }
 
     /**
      * Create a new manager instance with an own logger. Verbose flag is set to false.
      */
-    public FileSetManager()
-    {
-        this( LoggerFactory.getLogger( FileSetManager.class ), false );
+    public FileSetManager() {
+        this(LoggerFactory.getLogger(FileSetManager.class), false);
     }
 
     // ----------------------------------------------------------------------
@@ -100,27 +95,21 @@ public class FileSetManager
      * @throws MapperException if any
      * @see #getIncludedFiles(FileSet)
      */
-    public Map<String, String> mapIncludedFiles( FileSet fileSet )
-        throws MapperException
-    {
-        String[] sourcePaths = getIncludedFiles( fileSet );
+    public Map<String, String> mapIncludedFiles(FileSet fileSet) throws MapperException {
+        String[] sourcePaths = getIncludedFiles(fileSet);
         Map<String, String> mappedPaths = new LinkedHashMap<>();
 
-        FileNameMapper fileMapper = MapperUtil.getFileNameMapper( fileSet.getMapper() );
+        FileNameMapper fileMapper = MapperUtil.getFileNameMapper(fileSet.getMapper());
 
-        for ( String sourcePath : sourcePaths )
-        {
+        for (String sourcePath : sourcePaths) {
             String destPath;
-            if ( fileMapper != null )
-            {
-                destPath = fileMapper.mapFileName( sourcePath );
-            }
-            else
-            {
+            if (fileMapper != null) {
+                destPath = fileMapper.mapFileName(sourcePath);
+            } else {
                 destPath = sourcePath;
             }
 
-            mappedPaths.put( sourcePath, destPath );
+            mappedPaths.put(sourcePath, destPath);
         }
 
         return mappedPaths;
@@ -132,12 +121,10 @@ public class FileSetManager
      * @param fileSet The fileset defining rules for inclusion/exclusion, and base directory.
      * @return the array of matching filenames, relative to the basedir of the file-set.
      */
-    public String[] getIncludedFiles( FileSet fileSet )
-    {
-        DirectoryScanner scanner = scan( fileSet );
+    public String[] getIncludedFiles(FileSet fileSet) {
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner != null )
-        {
+        if (scanner != null) {
             return scanner.getIncludedFiles();
         }
 
@@ -150,12 +137,10 @@ public class FileSetManager
      * @param fileSet The fileset defining rules for inclusion/exclusion, and base directory.
      * @return the array of matching dirnames, relative to the basedir of the file-set.
      */
-    public String[] getIncludedDirectories( FileSet fileSet )
-    {
-        DirectoryScanner scanner = scan( fileSet );
+    public String[] getIncludedDirectories(FileSet fileSet) {
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner != null )
-        {
+        if (scanner != null) {
             return scanner.getIncludedDirectories();
         }
 
@@ -168,12 +153,10 @@ public class FileSetManager
      * @param fileSet The fileset defining rules for inclusion/exclusion, and base directory.
      * @return the array of non-matching filenames, relative to the basedir of the file-set.
      */
-    public String[] getExcludedFiles( FileSet fileSet )
-    {
-        DirectoryScanner scanner = scan( fileSet );
+    public String[] getExcludedFiles(FileSet fileSet) {
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner != null )
-        {
+        if (scanner != null) {
             return scanner.getExcludedFiles();
         }
 
@@ -186,12 +169,10 @@ public class FileSetManager
      * @param fileSet The fileset defining rules for inclusion/exclusion, and base directory.
      * @return the array of non-matching dirnames, relative to the basedir of the file-set.
      */
-    public String[] getExcludedDirectories( FileSet fileSet )
-    {
-        DirectoryScanner scanner = scan( fileSet );
+    public String[] getExcludedDirectories(FileSet fileSet) {
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner != null )
-        {
+        if (scanner != null) {
             return scanner.getExcludedDirectories();
         }
 
@@ -204,10 +185,8 @@ public class FileSetManager
      * @param fileSet The file-set matching rules, along with search base directory
      * @throws IOException If a matching file cannot be deleted
      */
-    public void delete( FileSet fileSet )
-        throws IOException
-    {
-        delete( fileSet, true );
+    public void delete(FileSet fileSet) throws IOException {
+        delete(fileSet, true);
     }
 
     /**
@@ -218,84 +197,63 @@ public class FileSetManager
      * @throws IOException If a matching file cannot be deleted and <code>throwsError=true</code>, otherwise print
      *             warning messages.
      */
-    public void delete( FileSet fileSet, boolean throwsError )
-        throws IOException
-    {
-        Set<String> deletablePaths = findDeletablePaths( fileSet );
+    public void delete(FileSet fileSet, boolean throwsError) throws IOException {
+        Set<String> deletablePaths = findDeletablePaths(fileSet);
 
-        if ( logger.isDebugEnabled() )
-        {
-            String paths = String.valueOf( deletablePaths ).replace( ',', '\n' );
-            logger.debug( "Found deletable paths: " + paths );
+        if (logger.isDebugEnabled()) {
+            String paths = String.valueOf(deletablePaths).replace(',', '\n');
+            logger.debug("Found deletable paths: " + paths);
         }
 
         List<String> warnMessages = new LinkedList<>();
 
-        for ( String path : deletablePaths )
-        {
-            File file = new File( fileSet.getDirectory(), path );
+        for (String path : deletablePaths) {
+            File file = new File(fileSet.getDirectory(), path);
 
-            if ( file.exists() )
-            {
-                if ( file.isDirectory() )
-                {
-                    if ( fileSet.isFollowSymlinks() || !isSymlink( file ) )
-                    {
-                        if ( verbose )
-                        {
-                            logger.info( "Deleting directory: " + file );
+            if (file.exists()) {
+                if (file.isDirectory()) {
+                    if (fileSet.isFollowSymlinks() || !isSymlink(file)) {
+                        if (verbose) {
+                            logger.info("Deleting directory: " + file);
                         }
 
-                        removeDir( file, fileSet.isFollowSymlinks(), throwsError, warnMessages );
-                    }
-                    else
-                    { // delete a symlink to a directory without follow
-                        if ( verbose )
-                        {
-                            logger.info( "Deleting symlink to directory: " + file );
+                        removeDir(file, fileSet.isFollowSymlinks(), throwsError, warnMessages);
+                    } else { // delete a symlink to a directory without follow
+                        if (verbose) {
+                            logger.info("Deleting symlink to directory: " + file);
                         }
 
-                        if ( !file.delete() )
-                        {
+                        if (!file.delete()) {
                             String message = "Unable to delete symlink " + file.getAbsolutePath();
-                            if ( throwsError )
-                            {
-                                throw new IOException( message );
+                            if (throwsError) {
+                                throw new IOException(message);
                             }
 
-                            if ( !warnMessages.contains( message ) )
-                            {
-                                warnMessages.add( message );
+                            if (!warnMessages.contains(message)) {
+                                warnMessages.add(message);
                             }
                         }
                     }
-                }
-                else
-                {
-                    if ( verbose )
-                    {
-                        logger.info( "Deleting file: " + file );
+                } else {
+                    if (verbose) {
+                        logger.info("Deleting file: " + file);
                     }
 
-                    if ( !FileUtils.deleteQuietly( file ) )
-                    {
+                    if (!FileUtils.deleteQuietly(file)) {
                         String message = "Failed to delete file " + file.getAbsolutePath() + ". Reason is unknown.";
-                        if ( throwsError )
-                        {
-                            throw new IOException( message );
+                        if (throwsError) {
+                            throw new IOException(message);
                         }
 
-                        warnMessages.add( message );
+                        warnMessages.add(message);
                     }
                 }
             }
         }
 
-        if ( logger.isWarnEnabled() && !throwsError && ( warnMessages.size() > 0 ) )
-        {
-            for ( String warnMessage : warnMessages )
-            {
-                logger.warn( warnMessage );
+        if (logger.isWarnEnabled() && !throwsError && (warnMessages.size() > 0)) {
+            for (String warnMessage : warnMessages) {
+                logger.warn(warnMessage);
             }
         }
     }
@@ -304,146 +262,122 @@ public class FileSetManager
     // Private methods
     // ----------------------------------------------------------------------
 
-    private boolean isSymlink( File file )
-        throws IOException
-    {
+    private boolean isSymlink(File file) throws IOException {
         File fileInCanonicalParent;
         File parentDir = file.getParentFile();
-        if ( parentDir == null )
-        {
+        if (parentDir == null) {
             fileInCanonicalParent = file;
+        } else {
+            fileInCanonicalParent = new File(parentDir.getCanonicalPath(), file.getName());
         }
-        else
-        {
-            fileInCanonicalParent = new File( parentDir.getCanonicalPath(), file.getName() );
+        if (logger.isDebugEnabled()) {
+            logger.debug("Checking for symlink:\nFile's canonical path: "
+                    + fileInCanonicalParent.getCanonicalPath() + "\nFile's absolute path with canonical parent: "
+                    + fileInCanonicalParent.getPath());
         }
-        if ( logger.isDebugEnabled() )
-        {
-            logger.debug( "Checking for symlink:\nFile's canonical path: "
-                + fileInCanonicalParent.getCanonicalPath() + "\nFile's absolute path with canonical parent: "
-                + fileInCanonicalParent.getPath() );
-        }
-        return !fileInCanonicalParent.getCanonicalFile().equals( fileInCanonicalParent.getAbsoluteFile() );
+        return !fileInCanonicalParent.getCanonicalFile().equals(fileInCanonicalParent.getAbsoluteFile());
     }
 
-    private Set<String> findDeletablePaths( FileSet fileSet )
-    {
-        Set<String> includes = findDeletableDirectories( fileSet );
-        includes.addAll( findDeletableFiles( fileSet, includes ) );
+    private Set<String> findDeletablePaths(FileSet fileSet) {
+        Set<String> includes = findDeletableDirectories(fileSet);
+        includes.addAll(findDeletableFiles(fileSet, includes));
 
         return includes;
     }
 
-    private Set<String> findDeletableDirectories( FileSet fileSet )
-    {
-        if ( verbose )
-        {
-            logger.info( "Scanning for deletable directories." );
+    private Set<String> findDeletableDirectories(FileSet fileSet) {
+        if (verbose) {
+            logger.info("Scanning for deletable directories.");
         }
 
-        DirectoryScanner scanner = scan( fileSet );
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner == null )
-        {
+        if (scanner == null) {
             return Collections.emptySet();
         }
 
-        Set<String> includes = new HashSet<>( Arrays.asList( scanner.getIncludedDirectories() ) );
-        List<String> excludes = new ArrayList<>( Arrays.asList( scanner.getExcludedDirectories() ) );
+        Set<String> includes = new HashSet<>(Arrays.asList(scanner.getIncludedDirectories()));
+        List<String> excludes = new ArrayList<>(Arrays.asList(scanner.getExcludedDirectories()));
         List<String> linksForDeletion = new ArrayList<>();
 
-        if ( !fileSet.isFollowSymlinks() )
-        {
-            if ( verbose )
-            {
-                logger.info( "Adding symbolic link dirs which were previously excluded"
-                    + " to the list being deleted." );
+        if (!fileSet.isFollowSymlinks()) {
+            if (verbose) {
+                logger.info("Adding symbolic link dirs which were previously excluded" + " to the list being deleted.");
             }
 
             // we need to see which entries were only excluded because they're symlinks...
-            scanner.setFollowSymlinks( true );
+            scanner.setFollowSymlinks(true);
             scanner.scan();
 
-            if ( logger.isDebugEnabled() )
-            {
-                logger.debug( "Originally marked for delete: " + includes );
-                logger.debug( "Marked for preserve (with followSymlinks == false): " + excludes );
+            if (logger.isDebugEnabled()) {
+                logger.debug("Originally marked for delete: " + includes);
+                logger.debug("Marked for preserve (with followSymlinks == false): " + excludes);
             }
 
-            List<String> includedDirsAndSymlinks = Arrays.asList( scanner.getIncludedDirectories() );
+            List<String> includedDirsAndSymlinks = Arrays.asList(scanner.getIncludedDirectories());
 
-            linksForDeletion.addAll( excludes );
-            linksForDeletion.retainAll( includedDirsAndSymlinks );
+            linksForDeletion.addAll(excludes);
+            linksForDeletion.retainAll(includedDirsAndSymlinks);
 
-            if ( logger.isDebugEnabled() )
-            {
-                logger.debug( "Symlinks marked for deletion (originally mismarked): "
-                    + linksForDeletion );
+            if (logger.isDebugEnabled()) {
+                logger.debug("Symlinks marked for deletion (originally mismarked): " + linksForDeletion);
             }
 
-            excludes.removeAll( includedDirsAndSymlinks );
+            excludes.removeAll(includedDirsAndSymlinks);
         }
 
-        excludeParentDirectoriesOfExcludedPaths( excludes, includes );
+        excludeParentDirectoriesOfExcludedPaths(excludes, includes);
 
-        includes.addAll( linksForDeletion );
+        includes.addAll(linksForDeletion);
 
         return includes;
     }
 
-    private Set<String> findDeletableFiles( FileSet fileSet, Set<String> deletableDirectories )
-    {
-        if ( verbose )
-        {
-            logger.info( "Re-scanning for deletable files." );
+    private Set<String> findDeletableFiles(FileSet fileSet, Set<String> deletableDirectories) {
+        if (verbose) {
+            logger.info("Re-scanning for deletable files.");
         }
 
-        DirectoryScanner scanner = scan( fileSet );
+        DirectoryScanner scanner = scan(fileSet);
 
-        if ( scanner == null )
-        {
+        if (scanner == null) {
             return deletableDirectories;
         }
 
-        deletableDirectories.addAll( Arrays.asList( scanner.getIncludedFiles() ) );
-        List<String> excludes = new ArrayList<>( Arrays.asList( scanner.getExcludedFiles() ) );
+        deletableDirectories.addAll(Arrays.asList(scanner.getIncludedFiles()));
+        List<String> excludes = new ArrayList<>(Arrays.asList(scanner.getExcludedFiles()));
         List<String> linksForDeletion = new ArrayList<>();
 
-        if ( !fileSet.isFollowSymlinks() )
-        {
-            if ( verbose )
-            {
-                logger.info( "Adding symbolic link files which were previously excluded "
-                    + "to the list being deleted." );
+        if (!fileSet.isFollowSymlinks()) {
+            if (verbose) {
+                logger.info(
+                        "Adding symbolic link files which were previously excluded " + "to the list being deleted.");
             }
 
             // we need to see which entries were only excluded because they're symlinks...
-            scanner.setFollowSymlinks( true );
+            scanner.setFollowSymlinks(true);
             scanner.scan();
 
-            if ( logger.isDebugEnabled() )
-            {
-                logger.debug( "Originally marked for delete: " + deletableDirectories );
-                logger.debug( "Marked for preserve (with followSymlinks == false): " + excludes );
+            if (logger.isDebugEnabled()) {
+                logger.debug("Originally marked for delete: " + deletableDirectories);
+                logger.debug("Marked for preserve (with followSymlinks == false): " + excludes);
             }
 
-            List<String> includedFilesAndSymlinks = Arrays.asList( scanner.getIncludedFiles() );
+            List<String> includedFilesAndSymlinks = Arrays.asList(scanner.getIncludedFiles());
 
-            linksForDeletion.addAll( excludes );
-            linksForDeletion.retainAll( includedFilesAndSymlinks );
+            linksForDeletion.addAll(excludes);
+            linksForDeletion.retainAll(includedFilesAndSymlinks);
 
-            if ( logger.isDebugEnabled() )
-            {
-                logger.debug( "Symlinks marked for deletion (originally mismarked): "
-                    + linksForDeletion );
+            if (logger.isDebugEnabled()) {
+                logger.debug("Symlinks marked for deletion (originally mismarked): " + linksForDeletion);
             }
 
-            excludes.removeAll( includedFilesAndSymlinks );
+            excludes.removeAll(includedFilesAndSymlinks);
         }
 
-        excludeParentDirectoriesOfExcludedPaths( excludes, deletableDirectories );
+        excludeParentDirectoriesOfExcludedPaths(excludes, deletableDirectories);
 
-        deletableDirectories.addAll( linksForDeletion );
+        deletableDirectories.addAll(linksForDeletion);
 
         return deletableDirectories;
     }
@@ -451,50 +385,40 @@ public class FileSetManager
     /**
      * Removes all parent directories of the already excluded files/directories from the given set of deletable
      * directories. I.e. if "subdir/excluded.txt" should not be deleted, "subdir" should be excluded from deletion, too.
-     * 
+     *
      * @param excludedPaths The relative paths of the files/directories which are excluded from deletion, must not be
      *            <code>null</code>.
      * @param deletablePaths The relative paths to files/directories which are scheduled for deletion, must not be
      *            <code>null</code>.
      */
-    private void excludeParentDirectoriesOfExcludedPaths( List<String> excludedPaths, Set<String> deletablePaths )
-    {
-        for ( String path : excludedPaths )
-        {
-            String parentPath = new File( path ).getParent();
+    private void excludeParentDirectoriesOfExcludedPaths(List<String> excludedPaths, Set<String> deletablePaths) {
+        for (String path : excludedPaths) {
+            String parentPath = new File(path).getParent();
 
-            while ( parentPath != null )
-            {
-                if ( logger.isDebugEnabled() )
-                {
-                    logger.debug(
-                            "Verifying path " + parentPath + " is not present; contains file which is excluded." );
+            while (parentPath != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Verifying path " + parentPath + " is not present; contains file which is excluded.");
                 }
 
-                boolean removed = deletablePaths.remove( parentPath );
+                boolean removed = deletablePaths.remove(parentPath);
 
-                if ( removed && logger.isDebugEnabled() )
-                {
-                    logger.debug( "Path " + parentPath + " was removed from delete list." );
+                if (removed && logger.isDebugEnabled()) {
+                    logger.debug("Path " + parentPath + " was removed from delete list.");
                 }
 
-                parentPath = new File( parentPath ).getParent();
+                parentPath = new File(parentPath).getParent();
             }
         }
 
-        if ( !excludedPaths.isEmpty() )
-        {
-            if ( logger.isDebugEnabled() )
-            {
-                logger.debug( "Verifying path " + "."
-                    + " is not present; contains file which is excluded." );
+        if (!excludedPaths.isEmpty()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Verifying path " + "." + " is not present; contains file which is excluded.");
             }
 
-            boolean removed = deletablePaths.remove( "" );
+            boolean removed = deletablePaths.remove("");
 
-            if ( removed && logger.isDebugEnabled() )
-            {
-                logger.debug( "Path " + "." + " was removed from delete list." );
+            if (removed && logger.isDebugEnabled()) {
+                logger.debug("Path " + "." + " was removed from delete list.");
             }
         }
     }
@@ -508,60 +432,46 @@ public class FileSetManager
      * @param warnMessages A list of warning messages used when <code>throwsError=false</code>.
      * @throws IOException If a matching file cannot be deleted and <code>throwsError=true</code>.
      */
-    private void removeDir( File dir, boolean followSymlinks, boolean throwsError, List<String> warnMessages )
-        throws IOException
-    {
+    private void removeDir(File dir, boolean followSymlinks, boolean throwsError, List<String> warnMessages)
+            throws IOException {
         String[] list = dir.list();
-        if ( list == null )
-        {
+        if (list == null) {
             list = new String[0];
         }
 
-        for ( String s : list )
-        {
-            File f = new File( dir, s );
-            if ( f.isDirectory() && ( followSymlinks || !isSymlink( f ) ) )
-            {
-                removeDir( f, followSymlinks, throwsError, warnMessages );
-            }
-            else
-            {
-                if ( !FileUtils.deleteQuietly( f ) )
-                {
+        for (String s : list) {
+            File f = new File(dir, s);
+            if (f.isDirectory() && (followSymlinks || !isSymlink(f))) {
+                removeDir(f, followSymlinks, throwsError, warnMessages);
+            } else {
+                if (!FileUtils.deleteQuietly(f)) {
                     String message = "Unable to delete file " + f.getAbsolutePath();
-                    if ( throwsError )
-                    {
-                        throw new IOException( message );
+                    if (throwsError) {
+                        throw new IOException(message);
                     }
 
-                    if ( !warnMessages.contains( message ) )
-                    {
-                        warnMessages.add( message );
+                    if (!warnMessages.contains(message)) {
+                        warnMessages.add(message);
                     }
                 }
             }
         }
 
-        if ( !FileUtils.deleteQuietly( dir ) )
-        {
+        if (!FileUtils.deleteQuietly(dir)) {
             String message = "Unable to delete directory " + dir.getAbsolutePath();
-            if ( throwsError )
-            {
-                throw new IOException( message );
+            if (throwsError) {
+                throw new IOException(message);
             }
 
-            if ( !warnMessages.contains( message ) )
-            {
-                warnMessages.add( message );
+            if (!warnMessages.contains(message)) {
+                warnMessages.add(message);
             }
         }
     }
 
-    private DirectoryScanner scan( FileSet fileSet )
-    {
-        File basedir = new File( fileSet.getDirectory() );
-        if ( !basedir.exists() || !basedir.isDirectory() )
-        {
+    private DirectoryScanner scan(FileSet fileSet) {
+        File basedir = new File(fileSet.getDirectory());
+        if (!basedir.exists() || !basedir.isDirectory()) {
             return null;
         }
 
@@ -570,27 +480,23 @@ public class FileSetManager
         String[] includesArray = fileSet.getIncludesArray();
         String[] excludesArray = fileSet.getExcludesArray();
 
-        if ( includesArray.length > 0 )
-        {
-            scanner.setIncludes( includesArray );
+        if (includesArray.length > 0) {
+            scanner.setIncludes(includesArray);
         }
 
-        if ( excludesArray.length > 0 )
-        {
-            scanner.setExcludes( excludesArray );
+        if (excludesArray.length > 0) {
+            scanner.setExcludes(excludesArray);
         }
 
-        if ( fileSet.isUseDefaultExcludes() )
-        {
+        if (fileSet.isUseDefaultExcludes()) {
             scanner.addDefaultExcludes();
         }
 
-        scanner.setBasedir( basedir );
-        scanner.setFollowSymlinks( fileSet.isFollowSymlinks() );
+        scanner.setBasedir(basedir);
+        scanner.setFollowSymlinks(fileSet.isFollowSymlinks());
 
         scanner.scan();
 
         return scanner;
     }
-
 }

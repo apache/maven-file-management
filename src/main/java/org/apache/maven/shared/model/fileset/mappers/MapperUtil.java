@@ -1,5 +1,3 @@
-package org.apache.maven.shared.model.fileset.mappers;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,51 +16,44 @@ package org.apache.maven.shared.model.fileset.mappers;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.shared.model.fileset.Mapper;
+package org.apache.maven.shared.model.fileset.mappers;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.maven.shared.model.fileset.Mapper;
+
 /**
  * Element to define a FileNameMapper.
  */
-public final class MapperUtil
-{
+public final class MapperUtil {
     private static final String MAPPER_PROPERTIES = "mappers.properties";
 
     private static Properties implementations;
 
-    private MapperUtil()
-    {
+    private MapperUtil() {
         // nop
     }
 
     /**
      * Initializes a properties object to store the built-in classnames.
      */
-    private static void initializeBuiltIns()
-    {
-        if ( implementations == null )
-        {
+    private static void initializeBuiltIns() {
+        if (implementations == null) {
             Properties props = new Properties();
 
             ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 
-            try ( InputStream stream = cloader.getResourceAsStream( MAPPER_PROPERTIES ) )
-            {
-                if ( stream == null )
-                {
-                    throw new IllegalStateException( "Cannot find classpath resource: " + MAPPER_PROPERTIES );
+            try (InputStream stream = cloader.getResourceAsStream(MAPPER_PROPERTIES)) {
+                if (stream == null) {
+                    throw new IllegalStateException("Cannot find classpath resource: " + MAPPER_PROPERTIES);
                 }
 
-                props.load( stream );
+                props.load(stream);
                 implementations = props;
-            }
-            catch ( IOException e )
-            {
-                throw new IllegalStateException( "Cannot find classpath resource: " + MAPPER_PROPERTIES );
+            } catch (IOException e) {
+                throw new IllegalStateException("Cannot find classpath resource: " + MAPPER_PROPERTIES);
             }
         }
     }
@@ -74,11 +65,8 @@ public final class MapperUtil
      * @return {@link FileNameMapper}
      * @throws MapperException in case of an error
      */
-    public static FileNameMapper getFileNameMapper( Mapper mapper )
-        throws MapperException
-    {
-        if ( mapper == null )
-        {
+    public static FileNameMapper getFileNameMapper(Mapper mapper) throws MapperException {
+        if (mapper == null) {
             return null;
         }
 
@@ -87,37 +75,31 @@ public final class MapperUtil
         String type = mapper.getType();
         String classname = mapper.getClassname();
 
-        if ( type == null && classname == null )
-        {
-            throw new MapperException( "nested mapper or " + "one of the attributes type or classname is required" );
+        if (type == null && classname == null) {
+            throw new MapperException("nested mapper or " + "one of the attributes type or classname is required");
         }
 
-        if ( type != null && classname != null )
-        {
-            throw new MapperException( "must not specify both type and classname attribute" );
+        if (type != null && classname != null) {
+            throw new MapperException("must not specify both type and classname attribute");
         }
-        if ( type != null )
-        {
-            classname = implementations.getProperty( type );
+        if (type != null) {
+            classname = implementations.getProperty(type);
         }
 
-        try
-        {
-            FileNameMapper m =
-                (FileNameMapper) Thread.currentThread().getContextClassLoader().loadClass( classname ).newInstance();
+        try {
+            FileNameMapper m = (FileNameMapper) Thread.currentThread()
+                    .getContextClassLoader()
+                    .loadClass(classname)
+                    .newInstance();
 
-            m.setFrom( mapper.getFrom() );
-            m.setTo( mapper.getTo() );
+            m.setFrom(mapper.getFrom());
+            m.setTo(mapper.getTo());
 
             return m;
-        }
-        catch ( ClassNotFoundException e )
-        {
-            throw new MapperException( "Cannot find mapper implementation: " + classname, e );
-        }
-        catch ( InstantiationException | IllegalAccessException e )
-        {
-            throw new MapperException( "Cannot load mapper implementation: " + classname, e );
+        } catch (ClassNotFoundException e) {
+            throw new MapperException("Cannot find mapper implementation: " + classname, e);
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new MapperException("Cannot load mapper implementation: " + classname, e);
         }
     }
 }
