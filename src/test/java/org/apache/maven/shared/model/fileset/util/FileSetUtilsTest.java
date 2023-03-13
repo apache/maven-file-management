@@ -18,40 +18,24 @@
  */
 package org.apache.maven.shared.model.fileset.util;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
-import org.codehaus.plexus.util.cli.CommandLineException;
-import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test the FileSet
@@ -91,19 +75,17 @@ public class FileSetUtilsTest {
         assertEquals(1, included.length);
     }
 
-    /**
-     * @throws IOException if any
-     * @throws InterruptedException if any
-     */
     @Test
-    public void testIncludesDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    public void testIncludesDontFollowSymlinks() throws IOException {
         File directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
-        if (!createSymlink(directory, subdir)) {
-            // assume failure to create a sym link is because the system does not support them
+        try {
+            createSymlink(directory, subdir);
+        } catch (UnsupportedOperationException | SecurityException ex) {
+            // failed to create a sym link is because the system does not support them
             // and not because the sym link creation failed.
-            return;
+            Assume.assumeFalse(true);
         }
 
         FileSet set = new FileSet();
@@ -118,20 +100,17 @@ public class FileSetUtilsTest {
         assertEquals(1, included.length);
     }
 
-    /**
-     * @throws IOException if any
-     * @throws InterruptedException if any
-     * @throws CommandLineException if any
-     */
     @Test
-    public void testDeleteDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    public void testDeleteDontFollowSymlinks() throws IOException {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
-        if (!createSymlink(directory, subdir)) {
-            // assume failure to create a sym link is because the system does not support them
+        try {
+            createSymlink(directory, subdir);
+        } catch (UnsupportedOperationException | SecurityException ex) {
+            // failed to create a sym link is because the system does not support them
             // and not because the sym link creation failed.
-            return;
+            Assume.assumeFalse(true);
         }
 
         FileSet set = new FileSet();
@@ -176,9 +155,12 @@ public class FileSetUtilsTest {
         File targetFile = new File(directory, "test.txt");
         File linkFile = new File(directory, "symlink");
 
-        if (!createSymlink(targetFile, linkFile)) {
-            // symlinks apparently not supported, skip test
-            return;
+        try {
+            createSymlink(targetFile, linkFile);
+        } catch (UnsupportedOperationException | SecurityException ex) {
+            // failed to create a sym link is because the system does not support them
+            // and not because the sym link creation failed.
+            Assume.assumeFalse(true);
         }
         targetFile.delete();
 
@@ -273,11 +255,8 @@ public class FileSetUtilsTest {
         assertFalse("included file has not been deleted", new File(directory, "included.txt").exists());
     }
 
-    /**
-     * @throws Exception if any
-     */
     @Test
-    public void testDeleteDontFollowSymlinksButDeleteThem() throws Exception {
+    public void testDeleteDontFollowSymlinksButDeleteThem() throws IOException {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinksButDeleteThem");
 
         createSymlink(new File(directory, "excluded"), new File(directory, "dirlink"));
@@ -302,30 +281,12 @@ public class FileSetUtilsTest {
         assertFalse("included directory has not been deleted", new File(directory, "dir1").exists());
     }
 
-    /**
-     * @param target The target file/directory of the symlink, must not be <code>null</code>.
-     * @param link The link to create, must not be <code>null</code>.
-     * @return
-     * @throws InterruptedException
-     * @throws CommandLineException
-     */
-    private boolean createSymlink(File target, File link) throws InterruptedException, CommandLineException {
-
+    private void createSymlink(File target, File link) throws IOException {
         if (link.exists()) {
             link.delete();
         }
-
-        Commandline cli = new Commandline();
-        cli.setExecutable("ln");
-        cli.createArg().setValue("-s");
-        cli.createArg().setValue(target.getPath());
-        cli.createArg().setValue(link.getPath());
-
-        int result = cli.execute().waitFor();
-
+        Files.createSymbolicLink(link.toPath(), target.toPath());
         linkFiles.add(link);
-
-        return result == 0;
     }
 
     private File setupTestDirectory(String directoryName) throws IOException {
