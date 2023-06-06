@@ -63,7 +63,7 @@
   </distributionManagement>
   <properties>
     <javaVersion>8</javaVersion>
-    <slf4jVersion>1.7.36</slf4jVersion>
+    <slf4jVersion>2.0.7</slf4jVersion>
     <project.build.outputTimestamp>2022-06-29T11:20:20Z</project.build.outputTimestamp>
   </properties>
 
