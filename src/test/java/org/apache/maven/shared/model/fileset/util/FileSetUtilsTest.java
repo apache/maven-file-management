@@ -31,6 +31,7 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,7 +42,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Test the FileSet
  */
 public class FileSetUtilsTest {
-    private final Set<File> testDirectories = new HashSet<>();
+    @TempDir
+    File testDirectory;
 
     private final Set<File> linkFiles = new HashSet<>();
 
@@ -50,10 +52,6 @@ public class FileSetUtilsTest {
     public void tearDown() throws IOException {
         for (File linkFile : linkFiles) {
             linkFile.delete();
-        }
-
-        for (File dir : testDirectories) {
-            FileUtils.deleteDirectory(dir);
         }
     }
 
@@ -302,13 +300,11 @@ public class FileSetUtilsTest {
 
         File sourceDir = new File(URLDecoder.decode(sourceResource.getPath(), "UTF-8"));
 
-        String basedir = System.getProperty("basedir", System.getProperty("user.dir"));
         String testBase = System.getProperty("testBase", "target/test-directories");
 
-        File testDir = new File(basedir, testBase + "/" + directoryName);
+        File testDir = new File(testDirectory, testBase + "/" + directoryName);
         if (testDir.mkdirs()) {
             FileUtils.copyDirectory(sourceDir, testDir);
-            testDirectories.add(testDir);
             return testDir;
         } else {
             throw new IOException("Could not create test directory " + testDir);
