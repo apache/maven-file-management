@@ -19,24 +19,24 @@
 package org.apache.maven.shared.model.fileset.mappers;
 
 import org.apache.maven.shared.model.fileset.Mapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * A test-case for the MapperUtil.
  */
 public class MapperUtilTest {
     @Test
-    public void getFileNameMapperShouldReturnNull() throws MapperException {
+    void getFileNameMapperShouldReturnNull() throws MapperException {
         assertNull(MapperUtil.getFileNameMapper(null));
     }
 
     @Test
-    public void getFileNameMapperShouldReturnIdentityMapper() throws MapperException {
+    void getFileNameMapperShouldReturnIdentityMapper() throws MapperException {
         Mapper mapper = new Mapper();
         FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
         assertNotNull(fileNameMapper);
@@ -44,7 +44,7 @@ public class MapperUtilTest {
     }
 
     @Test
-    public void getFileNameMapperShouldFileNameMapperType() throws MapperException {
+    void getFileNameMapperShouldFileNameMapperType() throws MapperException {
         // check with FileNameMapper type
         Mapper mapper = new Mapper();
         mapper.setType("glob");
@@ -56,7 +56,7 @@ public class MapperUtilTest {
     }
 
     @Test
-    public void testGetFileNameMapper() throws MapperException {
+    void testGetFileNameMapper() throws MapperException {
         try {
             assertNull(MapperUtil.getFileNameMapper(null));
         } catch (MapperException e) {

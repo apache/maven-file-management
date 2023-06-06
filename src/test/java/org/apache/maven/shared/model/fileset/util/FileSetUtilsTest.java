@@ -29,13 +29,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test the FileSet
@@ -46,7 +46,7 @@ public class FileSetUtilsTest {
     private final Set<File> linkFiles = new HashSet<>();
 
     /** {@inheritDoc} */
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         for (File linkFile : linkFiles) {
             linkFile.delete();
@@ -61,7 +61,7 @@ public class FileSetUtilsTest {
      * @throws IOException if any
      */
     @Test
-    public void testGetIncludedFiles() throws IOException {
+    void testGetIncludedFiles() throws IOException {
         File directory = setupTestDirectory("testGetIncludedFiles");
 
         FileSet set = new FileSet();
@@ -76,7 +76,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    public void testIncludesDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    void testIncludesDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
         File directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
@@ -99,7 +99,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    public void testDeleteDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    void testDeleteDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
@@ -126,7 +126,7 @@ public class FileSetUtilsTest {
      * @throws IOException if any
      */
     @Test
-    public void testDelete() throws IOException {
+    void testDelete() throws IOException {
         File directory = setupTestDirectory("testDelete");
         File subdirFile = new File(directory, "subdir/excluded.txt");
 
@@ -139,14 +139,14 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertFalse("file in marked subdirectory still exists.", subdirFile.exists());
+        assertFalse(subdirFile.exists(), "file in marked subdirectory still exists.");
     }
 
     /**
      * @throws Exception if any
      */
     @Test
-    public void testDeleteDanglingSymlink() throws Exception {
+    void testDeleteDanglingSymlink() throws Exception {
         File directory = setupTestDirectory("testDeleteDanglingSymlink");
         File targetFile = new File(directory, "test.txt");
         File linkFile = new File(directory, "symlink");
@@ -165,14 +165,14 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertFalse("directory still exists", directory.exists());
+        assertFalse(directory.exists(), "directory still exists");
     }
 
     /**
      * @throws Exception if any
      */
     @Test
-    public void testDeleteExcludeParentOfExcludedFile() throws Exception {
+    void testDeleteExcludeParentOfExcludedFile() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeParentOfExcludedFile");
 
         FileSet set = new FileSet();
@@ -184,14 +184,14 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertTrue("excluded file has been deleted", new File(directory, "excluded.txt").exists());
+        assertTrue(new File(directory, "excluded.txt").exists(), "excluded file has been deleted");
     }
 
     /**
      * @throws Exception if any
      */
     @Test
-    public void testDeleteExcludeParentOfExcludedDir() throws Exception {
+    void testDeleteExcludeParentOfExcludedDir() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeParentOfExcludedDir");
 
         FileSet set = new FileSet();
@@ -203,14 +203,14 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertTrue("excluded directory has been deleted", new File(directory, "excluded").exists());
+        assertTrue(new File(directory, "excluded").exists(), "excluded directory has been deleted");
     }
 
     /**
      * @throws Exception if any
      */
     @Test
-    public void testDeleteExcludeFollowSymlinks() throws Exception {
+    void testDeleteExcludeFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeFollowSymlinks");
 
         FileSet set = new FileSet();
@@ -222,16 +222,16 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertTrue("excluded file has been deleted", new File(directory, "excluded.txt").exists());
-        assertTrue("excluded directory has been deleted", new File(directory, "excluded").exists());
-        assertFalse("included file has not been deleted", new File(directory, "included.txt").exists());
+        assertTrue(new File(directory, "excluded.txt").exists(), "excluded file has been deleted");
+        assertTrue(new File(directory, "excluded").exists(), "excluded directory has been deleted");
+        assertFalse(new File(directory, "included.txt").exists(), "included file has not been deleted");
     }
 
     /**
      * @throws Exception if any
      */
     @Test
-    public void testDeleteExcludeDontFollowSymlinks() throws Exception {
+    void testDeleteExcludeDontFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeDontFollowSymlinks");
 
         FileSet set = new FileSet();
@@ -243,13 +243,13 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertTrue("excluded file has been deleted", new File(directory, "excluded.txt").exists());
-        assertTrue("excluded directory has been deleted", new File(directory, "excluded").exists());
-        assertFalse("included file has not been deleted", new File(directory, "included.txt").exists());
+        assertTrue(new File(directory, "excluded.txt").exists(), "excluded file has been deleted");
+        assertTrue(new File(directory, "excluded").exists(), "excluded directory has been deleted");
+        assertFalse(new File(directory, "included.txt").exists(), "included file has not been deleted");
     }
 
     @Test
-    public void testDeleteDontFollowSymlinksButDeleteThem() throws Exception {
+    void testDeleteDontFollowSymlinksButDeleteThem() throws Exception {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinksButDeleteThem");
 
         createSymlink(new File(directory, "excluded"), new File(directory, "dirlink"));
@@ -266,12 +266,12 @@ public class FileSetUtilsTest {
 
         fileSetManager.delete(set);
 
-        assertTrue("excluded file has been deleted", new File(directory, "excluded.txt").exists());
-        assertTrue("excluded directory has been deleted", new File(directory, "excluded").exists());
-        assertFalse("included dirlink has not been deleted", new File(directory, "dirlink").exists());
-        assertFalse("included filelink has not been deleted", new File(directory, "filelink").exists());
-        assertFalse("included directory has not been deleted", new File(directory, "dir0").exists());
-        assertFalse("included directory has not been deleted", new File(directory, "dir1").exists());
+        assertTrue(new File(directory, "excluded.txt").exists(), "excluded file has been deleted");
+        assertTrue(new File(directory, "excluded").exists(), "excluded directory has been deleted");
+        assertFalse(new File(directory, "dirlink").exists(), "included dirlink has not been deleted");
+        assertFalse(new File(directory, "filelink").exists(), "included filelink has not been deleted");
+        assertFalse(new File(directory, "dir0").exists(), "included directory has not been deleted");
+        assertFalse(new File(directory, "dir1").exists(), "included directory has not been deleted");
     }
 
     private boolean createSymlink(File target, File link) throws InterruptedException, CommandLineException {
