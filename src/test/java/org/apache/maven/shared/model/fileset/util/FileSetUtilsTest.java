@@ -24,14 +24,11 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -47,16 +44,6 @@ public class FileSetUtilsTest {
 
     @TempDir
     File testDirectory;
-
-    private final Set<Path> linkFiles = new HashSet<>();
-
-    /** {@inheritDoc} */
-    @AfterEach
-    public void tearDown() throws IOException {
-        for (Path linkFile : linkFiles) {
-            Files.deleteIfExists(linkFile);
-        }
-    }
 
     /**
      * @throws IOException if any
@@ -275,7 +262,7 @@ public class FileSetUtilsTest {
         assertFalse(Files.exists(directory.resolve("dir1")), "included directory has not been deleted");
     }
 
-    private boolean createSymlink(Path target, Path link)
+    private static boolean createSymlink(Path target, Path link)
             throws InterruptedException, CommandLineException, IOException {
         Files.deleteIfExists(link);
 
@@ -286,8 +273,6 @@ public class FileSetUtilsTest {
         cli.createArg().setValue(link.toFile().getPath());
 
         int result = cli.execute().waitFor();
-
-        linkFiles.add(link);
 
         return result == 0;
     }
