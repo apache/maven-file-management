@@ -24,7 +24,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +33,7 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -44,7 +44,9 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Test the FileSet
  */
 public class FileSetUtilsTest {
-    private final Set<Path> testDirectories = new HashSet<>();
+
+    @TempDir
+    File testDirectory;
 
     private final Set<Path> linkFiles = new HashSet<>();
 
@@ -53,10 +55,6 @@ public class FileSetUtilsTest {
     public void tearDown() throws IOException {
         for (Path linkFile : linkFiles) {
             Files.deleteIfExists(linkFile);
-        }
-
-        for (Path dir : testDirectories) {
-            FileUtils.deleteDirectory(dir.toFile());
         }
     }
 
@@ -303,14 +301,14 @@ public class FileSetUtilsTest {
 
         File sourceDir = new File(URLDecoder.decode(sourceResource.getPath(), "UTF-8"));
 
-        String basedir = System.getProperty("basedir", System.getProperty("user.dir"));
         String testBase = System.getProperty("testBase", "target/test-directories");
 
-        Path testDir = Paths.get(basedir, testBase, directoryName);
-        Files.createDirectories(testDir);
-
-        FileUtils.copyDirectory(sourceDir, testDir.toFile());
-        testDirectories.add(testDir);
-        return testDir;
+        File testDir = new File(testDirectory, testBase + "/" + directoryName);
+        if (testDir.mkdirs()) {
+            FileUtils.copyDirectory(sourceDir, testDir);
+            return testDir.toPath();
+        } else {
+            throw new IOException("Could not create test directory " + testDir);
+        }
     }
 }
