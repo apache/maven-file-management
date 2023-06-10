@@ -20,6 +20,7 @@ package org.apache.maven.shared.model.fileset.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -192,10 +193,10 @@ public class FileSetManager {
     /**
      * Delete the matching files and directories for the given file-set definition.
      *
-     * @param fileSet The file-set matching rules, along with search base directory.
-     * @param throwsError Throw IOException when errors have occurred by deleting files or directories.
-     * @throws IOException If a matching file cannot be deleted and <code>throwsError=true</code>, otherwise print
-     *             warning messages.
+     * @param fileSet the file-set matching rules, along with search base directory
+     * @param throwsError throw IOException when errors have occurred by deleting files or directories
+     * @throws IOException if a matching file cannot be deleted and <code>throwsError=true</code>, otherwise print
+     *             warning messages
      */
     public void delete(FileSet fileSet, boolean throwsError) throws IOException {
         Set<String> deletablePaths = findDeletablePaths(fileSet);
@@ -212,7 +213,7 @@ public class FileSetManager {
 
             if (file.exists()) {
                 if (file.isDirectory()) {
-                    if (fileSet.isFollowSymlinks() || !isSymlink(file)) {
+                    if (fileSet.isFollowSymlinks() || !Files.isSymbolicLink(file.toPath())) {
                         if (verbose) {
                             logger.info("Deleting directory: " + file);
                         }
@@ -261,22 +262,6 @@ public class FileSetManager {
     // ----------------------------------------------------------------------
     // Private methods
     // ----------------------------------------------------------------------
-
-    private boolean isSymlink(File file) throws IOException {
-        File fileInCanonicalParent;
-        File parentDir = file.getParentFile();
-        if (parentDir == null) {
-            fileInCanonicalParent = file;
-        } else {
-            fileInCanonicalParent = new File(parentDir.getCanonicalPath(), file.getName());
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Checking for symlink:\nFile's canonical path: "
-                    + fileInCanonicalParent.getCanonicalPath() + "\nFile's absolute path with canonical parent: "
-                    + fileInCanonicalParent.getPath());
-        }
-        return !fileInCanonicalParent.getCanonicalFile().equals(fileInCanonicalParent.getAbsoluteFile());
-    }
 
     private Set<String> findDeletablePaths(FileSet fileSet) {
         Set<String> includes = findDeletableDirectories(fileSet);
@@ -441,7 +426,7 @@ public class FileSetManager {
 
         for (String s : list) {
             File f = new File(dir, s);
-            if (f.isDirectory() && (followSymlinks || !isSymlink(f))) {
+            if (f.isDirectory() && (followSymlinks || !Files.isSymbolicLink(f.toPath()))) {
                 removeDir(f, followSymlinks, throwsError, warnMessages);
             } else {
                 if (!FileUtils.deleteQuietly(f)) {
