@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Test the FileSet
@@ -68,11 +69,9 @@ public class FileSetUtilsTest {
         Path directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         Path subdir = directory.resolve(directory.getFileName());
 
-        if (!createSymlink(directory, subdir)) {
-            // assume failure to create a sym link is because the system does not support them
-            // and not because the sym link creation failed.
-            return;
-        }
+        // assume failure to create a sym link is because the system does not support them
+        // and not because the sym link creation failed.
+        assumeTrue(createSymlink(directory, subdir));
 
         FileSet set = new FileSet();
         set.setDirectory(directory.toFile().getPath());
@@ -91,11 +90,9 @@ public class FileSetUtilsTest {
         Path directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         Path subdir = directory.resolve(directory.getFileName());
 
-        if (!createSymlink(directory, subdir)) {
-            // assume failure to create a sym link is because the system does not support them
-            // and not because the sym link creation failed.
-            return;
-        }
+        // assume failure to create a sym link is because the system does not support them
+        // and not because the sym link creation failed.
+        assumeTrue(createSymlink(directory, subdir));
 
         FileSet set = new FileSet();
         set.setDirectory(directory.toFile().getPath());
@@ -139,11 +136,11 @@ public class FileSetUtilsTest {
         Path targetFile = directory.resolve("test.txt");
         Path linkFile = directory.resolve("symlink");
 
-        if (!createSymlink(targetFile, linkFile)) {
-            // symlinks apparently not supported, skip test
-            return;
-        }
-        Files.deleteIfExists(targetFile);
+        // assume failure to create a sym link is because the system does not support them
+        // and not because the sym link creation failed.
+        assumeTrue(createSymlink(targetFile, linkFile));
+
+        Files.delete(targetFile);
 
         FileSet set = new FileSet();
         set.setDirectory(directory.toFile().getPath());
