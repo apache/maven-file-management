@@ -23,12 +23,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -44,16 +41,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class FileSetUtilsTest {
     @TempDir
     File testDirectory;
-
-    private final Set<File> linkFiles = new HashSet<>();
-
-    /** {@inheritDoc} */
-    @AfterEach
-    public void tearDown() throws IOException {
-        for (File linkFile : linkFiles) {
-            linkFile.delete();
-        }
-    }
 
     /**
      * @throws IOException if any
@@ -269,7 +256,6 @@ public class FileSetUtilsTest {
 
         try {
             Files.createSymbolicLink(link.toPath(), target.toPath());
-            linkFiles.add(link);
         } catch (IOException | SecurityException | UnsupportedOperationException ex) {
             // assume failure to create a symlink is because the system does not support
             // them and not because the symlink creation failed.
