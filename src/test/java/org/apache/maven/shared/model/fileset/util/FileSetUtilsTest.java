@@ -74,7 +74,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testIncludesDontFollowSymlinks() throws IOException, InterruptedException {
+    void testIncludesDontFollowSymlinks() throws IOException {
         File directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
@@ -93,7 +93,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testDeleteDontFollowSymlinks() throws IOException, InterruptedException {
+    void testDeleteDontFollowSymlinks() throws IOException {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
