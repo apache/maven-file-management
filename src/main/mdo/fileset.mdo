@@ -19,8 +19,8 @@
   under the License.
 -->
 
-<model xmlns="https://codehaus-plexus.github.io/MODELLO/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/1.4.0 https://codehaus-plexus.github.io/modello/xsd/modello-1.4.0.xsd">
+<model xmlns="https://codehaus-plexus.github.io/MODELLO/1.8.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/1.8.2 https://codehaus-plexus.github.io/modello/xsd/modello-1.8.2.xsd">
   <id>fileset</id>
   <name>FileSet</name>
   <description>
