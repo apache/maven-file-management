@@ -22,13 +22,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.model.fileset.FileSet;
-import org.codehaus.plexus.util.cli.CommandLineException;
-import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -75,13 +74,11 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testIncludesDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    void testIncludesDontFollowSymlinks() throws IOException, InterruptedException {
         File directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
-        // assume failure to create a sym link is because the system does not support them
-        // and not because the sym link creation failed.
-        assumeTrue(createSymlink(directory, subdir));
+        createSymlink(directory, subdir);
 
         FileSet set = new FileSet();
         set.setDirectory(directory.getPath());
@@ -96,13 +93,11 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testDeleteDontFollowSymlinks() throws IOException, InterruptedException, CommandLineException {
+    void testDeleteDontFollowSymlinks() throws IOException, InterruptedException {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
-        // assume failure to create a sym link is because the system does not support them
-        // and not because the sym link creation failed.
-        assumeTrue(createSymlink(directory, subdir));
+        createSymlink(directory, subdir);
 
         FileSet set = new FileSet();
         set.setDirectory(directory.getPath());
@@ -146,9 +141,7 @@ public class FileSetUtilsTest {
         File targetFile = new File(directory, "test.txt");
         File linkFile = new File(directory, "symlink");
 
-        // assume failure to create a sym link is because the system does not support them
-        // and not because the sym link creation failed.
-        assumeTrue(createSymlink(targetFile, linkFile));
+        createSymlink(targetFile, linkFile);
 
         targetFile.delete();
 
@@ -269,23 +262,19 @@ public class FileSetUtilsTest {
         assertFalse(new File(directory, "dir1").exists(), "included directory has not been deleted");
     }
 
-    private boolean createSymlink(File target, File link) throws InterruptedException, CommandLineException {
-
+    private void createSymlink(File target, File link) {
         if (link.exists()) {
             link.delete();
         }
 
-        Commandline cli = new Commandline();
-        cli.setExecutable("ln");
-        cli.createArg().setValue("-s");
-        cli.createArg().setValue(target.getPath());
-        cli.createArg().setValue(link.getPath());
-
-        int result = cli.execute().waitFor();
-
-        linkFiles.add(link);
-
-        return result == 0;
+        try {
+            Files.createSymbolicLink(link.toPath(), target.toPath());
+            linkFiles.add(link);
+        } catch (IOException | SecurityException | UnsupportedOperationException ex) {
+            // assume failure to create a symlink is because the system does not support
+            // them and not because the symlink creation failed.
+            assumeTrue(false);
+        }
     }
 
     private File setupTestDirectory(String directoryName) throws IOException {
