@@ -48,8 +48,8 @@
     <url>https://github.com/apache/maven-file-management/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
-    <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/MSHARED/</url>
+    <system>GitHub</system>
+    <url>https://github.com/apache/maven-file-management/issues</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
