@@ -58,9 +58,8 @@ Using Maven File Management API In A MOJO
  * My MOJO
  */
 @Mojo( name = "myGoal" )
-public class MyMojo
-    extends AbstractMojo
-{
+public class MyMojo extends AbstractMojo {
+
     /**
      * A list of <code>fileSet</code> rules to select files and directories.
      */
