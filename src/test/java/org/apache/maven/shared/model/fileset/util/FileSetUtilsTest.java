@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Test the FileSet
  */
-public class FileSetUtilsTest {
+class FileSetUtilsTest {
     @TempDir
     File testDirectory;
 
@@ -46,7 +46,7 @@ public class FileSetUtilsTest {
      * @throws IOException if any
      */
     @Test
-    void testGetIncludedFiles() throws IOException {
+    void getIncludedFiles() throws Exception {
         File directory = setupTestDirectory("testGetIncludedFiles");
 
         FileSet set = new FileSet();
@@ -61,7 +61,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testIncludesDontFollowSymlinks() throws IOException {
+    void includesDontFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testIncludesDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
@@ -80,7 +80,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testDeleteDontFollowSymlinks() throws IOException {
+    void deleteDontFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinks");
         File subdir = new File(directory, directory.getName());
 
@@ -103,7 +103,7 @@ public class FileSetUtilsTest {
      * @throws IOException if any
      */
     @Test
-    void testDelete() throws IOException {
+    void delete() throws Exception {
         File directory = setupTestDirectory("testDelete");
         File subdirFile = new File(directory, "subdir/excluded.txt");
 
@@ -123,7 +123,7 @@ public class FileSetUtilsTest {
      * @throws Exception if any
      */
     @Test
-    void testDeleteDanglingSymlink() throws Exception {
+    void deleteDanglingSymlink() throws Exception {
         File directory = setupTestDirectory("testDeleteDanglingSymlink");
         File targetFile = new File(directory, "test.txt");
         File linkFile = new File(directory, "symlink");
@@ -147,7 +147,7 @@ public class FileSetUtilsTest {
      * @throws Exception if any
      */
     @Test
-    void testDeleteExcludeParentOfExcludedFile() throws Exception {
+    void deleteExcludeParentOfExcludedFile() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeParentOfExcludedFile");
 
         FileSet set = new FileSet();
@@ -166,7 +166,7 @@ public class FileSetUtilsTest {
      * @throws Exception if any
      */
     @Test
-    void testDeleteExcludeParentOfExcludedDir() throws Exception {
+    void deleteExcludeParentOfExcludedDir() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeParentOfExcludedDir");
 
         FileSet set = new FileSet();
@@ -185,7 +185,7 @@ public class FileSetUtilsTest {
      * @throws Exception if any
      */
     @Test
-    void testDeleteExcludeFollowSymlinks() throws Exception {
+    void deleteExcludeFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeFollowSymlinks");
 
         FileSet set = new FileSet();
@@ -206,7 +206,7 @@ public class FileSetUtilsTest {
      * @throws Exception if any
      */
     @Test
-    void testDeleteExcludeDontFollowSymlinks() throws Exception {
+    void deleteExcludeDontFollowSymlinks() throws Exception {
         File directory = setupTestDirectory("testDeleteExcludeDontFollowSymlinks");
 
         FileSet set = new FileSet();
@@ -224,7 +224,7 @@ public class FileSetUtilsTest {
     }
 
     @Test
-    void testDeleteDontFollowSymlinksButDeleteThem() throws Exception {
+    void deleteDontFollowSymlinksButDeleteThem() throws Exception {
         File directory = setupTestDirectory("testDeleteDontFollowSymlinksButDeleteThem");
 
         createSymlink(new File(directory, "excluded"), new File(directory, "dirlink"));
