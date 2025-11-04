@@ -28,14 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * A test-case for the MapperUtil.
  */
-public class MapperUtilTest {
+class MapperUtilTest {
     @Test
-    void getFileNameMapperShouldReturnNull() throws MapperException {
+    void getFileNameMapperShouldReturnNull() throws Exception {
         assertNull(MapperUtil.getFileNameMapper(null));
     }
 
     @Test
-    void getFileNameMapperShouldReturnIdentityMapper() throws MapperException {
+    void getFileNameMapperShouldReturnIdentityMapper() throws Exception {
         Mapper mapper = new Mapper();
         FileNameMapper fileNameMapper = MapperUtil.getFileNameMapper(mapper);
         assertNotNull(fileNameMapper);
@@ -43,7 +43,7 @@ public class MapperUtilTest {
     }
 
     @Test
-    void getFileNameMapperShouldFileNameMapperType() throws MapperException {
+    void getFileNameMapperShouldFileNameMapperType() throws Exception {
         // check with FileNameMapper type
         Mapper mapper = new Mapper();
         mapper.setType("glob");
@@ -55,7 +55,7 @@ public class MapperUtilTest {
     }
 
     @Test
-    void testGetFileNameMapper() throws MapperException {
+    void getFileNameMapper() throws Exception {
         Mapper mapper = new Mapper();
         mapper.setType("glob");
         mapper.setFrom("*.java");
