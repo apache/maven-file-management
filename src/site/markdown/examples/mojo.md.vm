@@ -1,40 +1,32 @@
- ------
- Using Maven File Management API In A MOJO
- ------
- Vincent Siveton
- ------
- November 2007
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Using Maven File Management API In A MOJO
+# Using Maven File Management API In A MOJO
 
- This part explains how to use the Maven File Management API in a Maven Plugin.
+This part explains how to use the Maven File Management API in a Maven Plugin.
 
-* Add File Management API dependency
+Add File Management API dependency
+----------------------------------
 
- The first step is to add the File Management API as a Maven dependency, i.e. in the <<<pom.xml>>>:
+The first step is to add the File Management API as a Maven dependency, i.e. in the `pom.xml`:
 
-+-----+
+```xml
 <project>
   ...
   <dependencies>
@@ -47,13 +39,14 @@ Using Maven File Management API In A MOJO
   </dependencies>
   ...
 </project>
-+-----+
+```
 
-* Add FileSet in a MOJO
+Add FileSet in a MOJO
+---------------------
 
- The second step is to create your MOJO and add a <<<FileSet>>> object:
+The second step is to create your MOJO and add a `FileSet` object:
 
-+-----+
+```unknown
 /**
  * My MOJO
  */
@@ -74,11 +67,11 @@ public class MyMojo extends AbstractMojo {
 
     ...
 }
-+-----+
+```
 
- To use the <<<FileSet>>> object, you need to instantiate the <<<FileSetManager>>>.
+To use the `FileSet` object, you need to instantiate the `FileSetManager`.
 
-+-----+
+```unknown
 FileSetManager fileSetManager = new FileSetManager();
 
 String[] includedFiles = fileSetManager.getIncludedFiles( fileset );
@@ -86,13 +79,14 @@ String[] includedDir = fileSetManager.getIncludedDirectories( fileset );
 String[] excludedFiles = fileSetManager.getExcludedFiles( fileset );
 String[] excludedDir = fileSetManager.getExcludedDirectories( fileset );
 fileSetManager.delete( fileset );
-+-----+
+```
 
-* Configure your Maven Plugin
+Configure your Maven Plugin
+---------------------------
 
- The last step is the Maven Plugin configuration.
+The last step is the Maven Plugin configuration.
 
-+-----+
+```xml
 <project>
   ...
   <build>
@@ -136,4 +130,4 @@ fileSetManager.delete( fileset );
   </build>
   ...
 </project>
-+-----+
+```
