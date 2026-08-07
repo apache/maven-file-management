@@ -1,3 +1,10 @@
+---
+title: Using Maven File Management API In A MOJO
+author: 
+  - Vincent Siveton
+date: November 2007
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
