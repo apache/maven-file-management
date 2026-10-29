@@ -52,8 +52,8 @@
     <url>https://github.com/apache/maven-file-management/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-file-management/</url>
+    <system>GitHub</system>
+    <url>https://github.com/apache/maven-file-management/actions</url>
   </ciManagement>
   <distributionManagement>
     <site>
