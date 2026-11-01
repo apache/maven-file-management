@@ -53,7 +53,7 @@ Add FileSet in a MOJO
 
 The second step is to create your MOJO and add a `FileSet` object:
 
-```unknown
+```java
 /**
  * My MOJO
  */
@@ -78,7 +78,7 @@ public class MyMojo extends AbstractMojo {
 
 To use the `FileSet` object, you need to instantiate the `FileSetManager`.
 
-```unknown
+```java
 FileSetManager fileSetManager = new FileSetManager();
 
 String[] includedFiles = fileSetManager.getIncludedFiles( fileset );
