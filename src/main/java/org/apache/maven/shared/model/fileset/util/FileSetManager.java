@@ -252,7 +252,7 @@ public class FileSetManager {
             }
         }
 
-        if (logger.isWarnEnabled() && !throwsError && (warnMessages.size() > 0)) {
+        if (logger.isWarnEnabled() && !throwsError && (!warnMessages.isEmpty())) {
             for (String warnMessage : warnMessages) {
                 logger.warn(warnMessage);
             }
